@@ -1,0 +1,62 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["rhel-openssl-1.0.x"]
+}
+
+model User {
+  id        String    @id @default(uuid())
+  FirstName String
+  LastName  String?
+  email     String    @unique
+  password  String
+  photoUrl  String? // Default dicebear of first and last name
+  Gender    Gender?
+  DOB       DateTime?
+  createdAt DateTime  @default(now())
+  profile   Profile?  @relation(name: "ProfileToUser")
+}
+
+model Profile {
+  id      Int     @id @default(autoincrement())
+  Role    Role    @default(ALL_ROUNDER)
+  Runs    Int?
+  Wicket  Int?
+  Matches Int?
+  captain Boolean @default(false)
+  user    User    @relation(name: "ProfileToUser", fields: [userId], references: [id])
+  userId  String  @unique
+  team    Team    @relation(name: "ProfileToTeam", fields: [teamId], references: [id])
+  teamId  Int     @unique
+}
+
+model Team {
+  id            Int       @id @default(autoincrement())
+  playedMatches Int?
+  winRate       Float?
+  players       Profile[] @relation(name: "ProfileToTeam")
+  matchId       Game[]    @relation(name: "GameToTeam")
+}
+
+model Game {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  teams     Team[]   @relation(name: "GameToTeam")
+  overs     Int
+  scoreCard Json
+}
+
+enum Role {
+  BATSMAN
+  BOWLER
+  ALL_ROUNDER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
