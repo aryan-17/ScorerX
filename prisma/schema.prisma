@@ -54,6 +54,7 @@ enum Role {
   BATSMAN
   BOWLER
   ALL_ROUNDER
+  UMPIRE
 }
 
 enum Gender {
