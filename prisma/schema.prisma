@@ -28,9 +28,9 @@ model Profile {
   Wicket  Int?
   Matches Int?
   captain Boolean @default(false)
-  user    User    @relation(name: "ProfileToUser", fields: [userId], references: [id])
+  user    User    @relation(name: "ProfileToUser", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId  String  @unique
-  team    Team    @relation(name: "ProfileToTeam", fields: [teamId], references: [id])
+  team    Team    @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onDelete:Cascade, onUpdate:Cascade)
   teamId  Int     @unique
 }
 
@@ -54,7 +54,6 @@ enum Role {
   BATSMAN
   BOWLER
   ALL_ROUNDER
-  UMPIRE
 }
 
 enum Gender {
