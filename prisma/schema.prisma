@@ -11,12 +11,12 @@ generator client {
 model User {
   id        String    @id @default(uuid())
   FirstName String
-  LastName  String?
+  LastName  String
   email     String    @unique
   password  String
   photoUrl  String? // Default dicebear of first and last name
-  Gender    Gender?
-  DOB       DateTime?
+  Gender    Gender
+  DOB       DateTime
   createdAt DateTime  @default(now())
   profile   Profile?  @relation(name: "ProfileToUser")
 }
@@ -50,10 +50,18 @@ model Game {
   scoreCard Json
 }
 
+model Otp{
+  id Int @id @default(autoincrement())
+  email String
+  otp String
+  createdAt DateTime @default(now())
+}
+
 enum Role {
   BATSMAN
   BOWLER
   ALL_ROUNDER
+  UMPIRE
 }
 
 enum Gender {
