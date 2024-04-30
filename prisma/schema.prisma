@@ -5,33 +5,34 @@ datasource db {
 
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["rhel-openssl-1.0.x"]
+  binaryTargets = ["rhel-openssl-1.0.x", "windows"]
 }
 
 model User {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   FirstName String
   LastName  String
-  email     String    @unique
+  email     String   @unique
   password  String
   photoUrl  String? // Default dicebear of first and last name
   Gender    Gender
   DOB       DateTime
-  createdAt DateTime  @default(now())
-  profile   Profile?  @relation(name: "ProfileToUser")
+  token   String?
+  createdAt DateTime @default(now())
+  profile   Profile? @relation(name: "ProfileToUser")
 }
 
 model Profile {
   id      Int     @id @default(autoincrement())
   Role    Role    @default(ALL_ROUNDER)
-  Runs    Int?
-  Wicket  Int?
-  Matches Int?
+  Runs    Int?    @default(0)
+  Wicket  Int?    @default(0)
+  Matches Int?    @default(0)
   captain Boolean @default(false)
   user    User    @relation(name: "ProfileToUser", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId  String  @unique
-  team    Team    @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onDelete:Cascade, onUpdate:Cascade)
-  teamId  Int     @unique
+  team    Team?    @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  teamId  Int?     @unique
 }
 
 model Team {
@@ -50,10 +51,10 @@ model Game {
   scoreCard Json
 }
 
-model Otp{
-  id Int @id @default(autoincrement())
-  email String
-  otp String
+model Otp {
+  id        Int      @id @default(autoincrement())
+  email     String
+  otp       String
   createdAt DateTime @default(now())
 }
 

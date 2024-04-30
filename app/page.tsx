@@ -14,10 +14,18 @@ export default function Home() {
         SignIn
       </button>
       <button onClick={()=>{
-        router.push(`/auth/login`);
+        signIn()
       }}>
         Login
       </button>
+      <button onClick={()=>{
+        signOut()
+      }}>
+        Log Out
+      </button>
+      {
+        JSON.stringify(session)
+      }
     </div>
   );
 }

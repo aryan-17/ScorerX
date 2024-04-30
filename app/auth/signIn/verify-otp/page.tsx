@@ -7,6 +7,7 @@ import { authEndPoints } from "@/services/apis";
 export default function EmailVerify() {
   const [submit, setSubmit] = useState(false);
   const [email, setEmail] = useState("");
+  const [loading, setloading] = useState(false);
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -14,8 +15,13 @@ export default function EmailVerify() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await apiConnector("POST", authEndPoints.SENDOTP_API, email);
+    setloading(true);
+    const res = await apiConnector("POST", authEndPoints.SENDOTP_API, {
+      "email":email
+    });
+    console.log(res);
     setSubmit(true);
+    setloading(false);
   };
 
   return (
@@ -28,7 +34,9 @@ export default function EmailVerify() {
             onChange={(e) => changeHandler(e)}
           />
         </label>
-        <input type="submit" value={"Verify Email"} />
+        {
+          (loading===true) ? (<input type="submit" value={"Verify Email"} disabled/>) : (<input type="submit" value={"Verify Email"} />)
+        }
       </form>
       {submit && <OtpModal />}
     </div>

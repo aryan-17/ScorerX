@@ -7,7 +7,7 @@ export default async function sendVerificationMail(email:string, otp:string) {
             "Verification Mail",
             emailTemplate(otp)
         )
-        console.log(mailResponse);
+        // console.log(mailResponse);
 
         return Response.json({
             success:true,
