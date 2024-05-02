@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import prisma from "@/db/client";
-import otpGenerator from "otp-generator";
 import sendVerificationMail from "@/services/operations/mail/sendVerificationMail";
+import generateOtp from "@/services/operations/otp/generateOtp";
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,26 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     // await generateOtp(email, 1);
-    var otp = otpGenerator.generate(6, {
-      upperCaseAlphabets: false,
-      lowerCaseAlphabets: false,
-      specialChars: false,
-    });
-
-    const existingOtp = await prisma.otp.findFirst({
-      where: {
-        otp: otp,
-      },
-    });
-
-    while (existingOtp) {
-      otp = otpGenerator.generate(6, {
-        upperCaseAlphabets: false,
-        lowerCaseAlphabets: false,
-        specialChars: false,
-      });
-    }
-    console.log("OPT----->", otp);
+    const otp = await generateOtp();
 
     const res = await prisma.otp.create({
       data: {

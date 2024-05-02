@@ -2,9 +2,17 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/db/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
 
-export const NEXT_AUTH = {
+import { DefaultSession, NextAuthOptions } from 'next-auth';
+import { generateJwt } from "@/services/utils/generateJwt";
+
+declare module 'next-auth' {
+  interface Session extends DefaultSession {
+    accessToken: string;
+  }
+}
+
+export const NEXT_AUTH:NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -20,10 +28,8 @@ export const NEXT_AUTH = {
           placeholder: "Enter your Password",
         },
       },
-      async authorize(credentials: any, req) {
+      async authorize(credentials: Record<"username" | "password", string>) {
         try {
-          const secret = process.env.NEXTAUTH_SECRET as string;
-          console.log(credentials.username);
 
           const userDb = await prisma.user.findFirst({
             where: {
@@ -42,19 +48,16 @@ export const NEXT_AUTH = {
             userDb.password &&
             (await bcrypt.compare(credentials.password, userDb.password))
           ) {
-            const token = jwt.sign({ id: userDb.id }, secret);
+            const token = await generateJwt({id:userDb.id});
 
-            await prisma.user.update({
-              where: {
-                id: userDb.id,
-              },
-              data: {
-                token: token,
-              },
-            });
-
-            const cookieStore = cookies();
-            cookieStore.set("token",token);
+            // await prisma.user.update({
+            //   where: {
+            //     id: userDb.id,
+            //   },
+            //   data: {
+            //     token: token,
+            //   },
+            // });
 
             return {
               id: userDb.id,

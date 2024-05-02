@@ -1,5 +1,5 @@
 import mailSender from "@/services/utils/mailSender"
-import emailTemplate from "@/mail/templates/emailVerify"
+import resetPassword from "@/mail/templates/resetPassword"
 
 
 export default async function sendVerificationMail(email:string, otp:string) {
@@ -8,7 +8,7 @@ export default async function sendVerificationMail(email:string, otp:string) {
         const mailResponse = await mailSender(
             email,
             "Verification Mail",
-            emailTemplate(otp)
+            resetPassword(otp)
         )
 
         console.log(mailResponse);

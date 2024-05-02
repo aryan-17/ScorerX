@@ -1,4 +1,4 @@
-exports.resetPassword = (otp) => {
+const resetPassword = (otp) => {
 	return `<!DOCTYPE html>
     <html>
     
@@ -72,3 +72,5 @@ exports.resetPassword = (otp) => {
     
     </html>`;
 };
+
+module.exports = resetPassword
