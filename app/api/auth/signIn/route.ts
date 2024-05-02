@@ -49,6 +49,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const checkVerified = await prisma.verification.findFirst({
+      where:{
+        email:email,
+        verified:true
+      }
+    })
+
+    if(!checkVerified){
+      return Response.json({
+        success:false,
+        message:"User not verified"
+      },{
+        status:400
+      })
+    }
+
     const existingUser = await prisma.user.findFirst({
       where: {
         email: email,
@@ -97,6 +113,8 @@ export async function POST(req: NextRequest) {
       success: true,
       data: result,
       message: "User Created",
+    },{
+      status:200
     });
   } catch (error) {
     console.log(error);

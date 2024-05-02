@@ -2,6 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/db/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 export const NEXT_AUTH = {
   providers: [
@@ -51,6 +52,10 @@ export const NEXT_AUTH = {
                 token: token,
               },
             });
+
+            const cookieStore = cookies();
+            cookieStore.set("token",token);
+
             return {
               id: userDb.id,
               firstName: userDb.FirstName,
@@ -70,20 +75,17 @@ export const NEXT_AUTH = {
   },
   secret: process.env.NEXTAUTH_SECRET || "secr3t",
   callbacks: {
-    session: ({ session, token }: any) => {
-        if(session?.user){
-            session.user.token = token.token;
-        }
+    session: ({ session, token }: any) => {            
+      if (session?.user) {
+        session.accessToken = token.token;
+      }
       return session;
     },
     jwt: ({ token, user }: any) => {
-        if(user){
-            console.log("user---------------->", user);
-            token.token = user.token
-        }
-        console.log("token------------------->",token);
-        
-        return token;
+      if (user) {
+        token.token = user.token;
+      }
+      return token;
     },
   },
 };

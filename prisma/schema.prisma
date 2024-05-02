@@ -17,10 +17,17 @@ model User {
   photoUrl  String? // Default dicebear of first and last name
   Gender    Gender
   DOB       DateTime
-  token   String?
+  token     String?
   createdAt DateTime @default(now())
   profile   Profile? @relation(name: "ProfileToUser")
 }
+
+model Verification {
+  id Int @id @default(autoincrement())
+  email String 
+  verified Boolean @default(false)
+}
+
 
 model Profile {
   id      Int     @id @default(autoincrement())
@@ -31,8 +38,8 @@ model Profile {
   captain Boolean @default(false)
   user    User    @relation(name: "ProfileToUser", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId  String  @unique
-  team    Team?    @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  teamId  Int?     @unique
+  team    Team?   @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  teamId  Int?    @unique
 }
 
 model Team {
