@@ -2,7 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/db/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import { cookies } from "next/headers";
 import { DefaultSession, NextAuthOptions } from 'next-auth';
 import { generateJwt } from "@/services/utils/generateJwt";
 
@@ -50,15 +50,6 @@ export const NEXT_AUTH:NextAuthOptions = {
           ) {
             const token = await generateJwt({id:userDb.id});
 
-            // await prisma.user.update({
-            //   where: {
-            //     id: userDb.id,
-            //   },
-            //   data: {
-            //     token: token,
-            //   },
-            // });
-
             return {
               id: userDb.id,
               firstName: userDb.FirstName,
@@ -78,9 +69,10 @@ export const NEXT_AUTH:NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET || "secr3t",
   callbacks: {
-    session: ({ session, token }: any) => {            
+    session: ({ session, token }: any) => {   
+      
       if (session?.user) {
-        session.accessToken = token.token;
+        session.accessToken = token.token;     
       }
       return session;
     },

@@ -3,45 +3,47 @@ import prisma from "@/db/client";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH } from "@/lib/auth";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { fetchJwt } from "@/services/utils/fetchJwt";
 
-
-export async function GET(req:NextRequest, res:NextResponse) {
+export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(NEXT_AUTH);
+    // const session = await getServerSession(NEXT_AUTH);
+    // const token = session?.accessToken;
 
-   const token = session?.accessToken;
+    const url = new URL(req.url);
+    const token = url.searchParams.get("token");
     
-
     
-
-    if(!token){
-        // Redirect
-        return Response.json({
-            success:false,
-            message:"Logged Out"
-        })
+    if (!token) {
+      // Redirect
+      return Response.json(
+        {
+          success: false,
+          message: "Logged Out",
+        },
+        {
+          status: 401,
+        }
+      );
     }
 
-    const payload = jwt.verify(token, process.env.NEXTAUTH_SECRET as string) as JwtPayload;
-    const userId  = payload.id;
-    
+    const userId = await fetchJwt(token);
 
     const userDetails = await prisma.user.findFirst({
-        where:{
-          id:userId
-        },
-        select:{
-            FirstName:true,
-            LastName:true,
-            email:true,
-            photoUrl:true,
-            Gender:true,
-            DOB:true
-        }
-    })
+      where: {
+        id: userId,
+      },
+      select: {
+        FirstName: true,
+        LastName: true,
+        email: true,
+        photoUrl: true,
+        Gender: true,
+        DOB: true,
+      },
+    });
 
     console.log(userDetails);
-
 
     return Response.json(
       {
@@ -71,10 +73,10 @@ export async function DELETE(req: NextRequest) {
   try {
     const { userId } = await req.json();
     const userTobeDeleted = await prisma.user.findFirst({
-      where:{
-        id:userId
-      }
-    })
+      where: {
+        id: userId,
+      },
+    });
 
     if (!userTobeDeleted) {
       return Response.json(
@@ -89,13 +91,13 @@ export async function DELETE(req: NextRequest) {
     }
 
     const verificationId = await prisma.verification.findFirst({
-      where:{
-        email:userTobeDeleted.email
+      where: {
+        email: userTobeDeleted.email,
       },
-      select:{
-        id:true
-      }
-    },)
+      select: {
+        id: true,
+      },
+    });
 
     const [deleteUser, deleteVerification] = await prisma.$transaction([
       prisma?.user.delete({
@@ -104,11 +106,11 @@ export async function DELETE(req: NextRequest) {
         },
       }),
       prisma.verification.delete({
-        where:{
-          id:verificationId?.id
-        }
-      })
-    ])
+        where: {
+          id: verificationId?.id,
+        },
+      }),
+    ]);
 
     return Response.json(
       {

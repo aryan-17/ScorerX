@@ -9,25 +9,27 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  FirstName String
-  LastName  String
-  email     String   @unique
-  password  String
-  photoUrl  String? // Default dicebear of first and last name
-  Gender    Gender
-  DOB       DateTime
-  token     String?
-  createdAt DateTime @default(now())
-  profile   Profile? @relation(name: "ProfileToUser")
+  id         String   @id @default(uuid())
+  FirstName  String
+  LastName   String
+  email      String   @unique
+  password   String
+  photoUrl   String? // Default dicebear of first and last name
+  Gender     Gender
+  DOB        DateTime
+  token      String?
+  createdAt  DateTime @default(now())
+  ownedTeams Team?   @relation(name: "OwnerToUser")
+  profile    Profile? @relation(name: "ProfileToUser")
+
+  @@unique([FirstName, LastName])
 }
 
 model Verification {
-  id Int @id @default(autoincrement())
-  email String 
+  id       Int     @id @default(autoincrement())
+  email    String
   verified Boolean @default(false)
 }
-
 
 model Profile {
   id      Int     @id @default(autoincrement())
@@ -36,24 +38,32 @@ model Profile {
   Wicket  Int?    @default(0)
   Matches Int?    @default(0)
   captain Boolean @default(false)
+  umpire  Game?   @relation(name: "UmpireToProfile", fields: [gameId], references: [id])
+  gameId  Int?    @unique
   user    User    @relation(name: "ProfileToUser", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId  String  @unique
-  team    Team?   @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  teamId  Int?    @unique
+  team    Team?   @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onUpdate: Cascade) // ON DELETE >???
+  teamId  Int?    
 }
 
 model Team {
   id            Int       @id @default(autoincrement())
-  playedMatches Int?
-  winRate       Float?
+  name          String    
+  playedMatches Int       @default(0)
+  winRate       Float     @default(0)
+  owner         User      @relation(name: "OwnerToUser", fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId       String    @unique
   players       Profile[] @relation(name: "ProfileToTeam")
   matchId       Game[]    @relation(name: "GameToTeam")
+
+  @@unique([name,ownerId])
 }
 
 model Game {
   id        Int      @id @default(autoincrement())
   date      DateTime
   teams     Team[]   @relation(name: "GameToTeam")
+  umpire    Profile? @relation(name: "UmpireToProfile")
   overs     Int
   scoreCard Json
 }
@@ -69,7 +79,6 @@ enum Role {
   BATSMAN
   BOWLER
   ALL_ROUNDER
-  UMPIRE
 }
 
 enum Gender {
