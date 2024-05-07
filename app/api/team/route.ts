@@ -40,9 +40,9 @@ export async function GET(req: NextRequest) {
       where: {
         ownerId: userId,
       },
-      include:{
-        players:true
-      }
+      include: {
+        players: true,
+      },
     });
 
     console.log("Teams in which user is a player---->", teams?.team);
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
         message: "Team has been created",
       },
       {
-        status: 200,
+        status: 201,
       }
     );
   } catch (error) {
@@ -143,24 +143,150 @@ export async function DELETE(req: NextRequest) {
     const userId = await fetchJwt(token);
 
     const deletedTeam = await prisma.team.delete({
-        where:{
-            ownerId:userId
-        }
-    })
+      where: {
+        ownerId: userId,
+      },
+    });
 
     console.log(deletedTeam);
 
     return Response.json({
-        success:true,
-        message:"Team Deleted"
-    })
-
+      success: true,
+      message: "Team Deleted",
+    });
   } catch (error) {
     console.log(error);
     return Response.json(
       {
         success: false,
         message: "Team can't get deleted",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+}
+
+// Appoint a Captain
+export async function PATCH(req: NextRequest) {
+  try {
+    // const session = await getServerSession(NEXT_AUTH);
+    // const token = session?.accessToken;
+    const { token, playerId } = await req.json();
+    const userId = await fetchJwt(token);
+
+    const player = await prisma.profile.findFirst({
+      where: {
+        id: Number(playerId),
+      },
+    });
+
+    if (!player) {
+      return Response.json(
+        {
+          success: false,
+          message: "No player found",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const owner = await prisma.user.findFirst({
+      where: {
+        id: String(userId),
+      },
+      include: {
+        ownedTeams: {
+          include: {
+            players: true,
+          },
+        },
+      },
+    });
+
+    const exCaptainProfile = await prisma.user.findFirst({
+      where: {
+        id: String(userId),
+      },
+      include: {
+        ownedTeams: {
+          include: {
+            players: {
+              where: {
+                captain: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const players = owner?.ownedTeams?.players;
+    const newCaptain = players?.find(
+      (player) => player.id === Number(playerId)
+    );
+    const exCaptain = exCaptainProfile?.ownedTeams?.players[0];
+
+    if (!newCaptain) {
+      return Response.json(
+        {
+          success: false,
+          message: "Player not in your team",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (!exCaptain) {
+      const newCaptainProfile = await prisma.profile.update({
+        where: {
+          id: newCaptain.id,
+        },
+        data: {
+          captain: true,
+        },
+      })
+      console.log("New Captain---->",newCaptainProfile);
+      
+    } else {
+      const [remPrevCaptain, newUpdatedCaptain] = await prisma.$transaction([
+        prisma.profile.update({
+          where: {
+            id: exCaptain?.id,
+          },
+          data: {
+            captain: false,
+          },
+        }),
+        prisma.profile.update({
+          where: {
+            id: newCaptain.id,
+          },
+          data: {
+            captain: true,
+          },
+        }),
+      ]);
+      console.log("Old Captain-------->", remPrevCaptain);
+      console.log("New Captain-------->", newUpdatedCaptain);
+    }
+
+    return Response.json({
+      success: true,
+      message: "Captain appointed",
+    });
+  } catch (error) {
+    console.log(error);
+
+    return Response.json(
+      {
+        success: false,
+        message: "Captain cannot get appointed",
       },
       {
         status: 500,

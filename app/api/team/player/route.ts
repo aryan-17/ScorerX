@@ -155,6 +155,8 @@ export async function DELETE(req: NextRequest) {
       return Response.json({
         success: false,
         message: "Player is the owner",
+      },{
+        status:400
       });
     }
 
@@ -164,6 +166,7 @@ export async function DELETE(req: NextRequest) {
       },
       data: {
         teamId: null,
+        captain:false
       },
     });
     console.log(updatedProfile);
@@ -171,6 +174,8 @@ export async function DELETE(req: NextRequest) {
     return Response.json({
       success: true,
       message: "Player has been removed",
+    },{
+      status:200
     });
   } catch (error) {
     console.log(error);
