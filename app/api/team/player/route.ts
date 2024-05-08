@@ -38,6 +38,25 @@ export async function POST(req: NextRequest) {
 
     const teamId = owner?.ownedTeams?.id;
 
+    const existingplayers = await prisma.team.findFirst({
+      where:{
+        id:teamId
+      },
+      include:{
+        players:true
+      }
+    })
+
+    if(existingplayers && existingplayers?.players.length > 11){
+      return Response.json({
+        success:false,
+        message:"Team is full"
+      },{
+        status:400
+      })
+    }
+    
+
     if (!profile) {
       return Response.json(
         {
