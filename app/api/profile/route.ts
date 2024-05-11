@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import prisma from "@/db/client";
 import { fetchJwt } from "@/services/utils/fetchJwt";
 
+// Role Change
 export async function PATCH(req: NextRequest) {
   try {
     // const session = await getServerSession(NEXT_AUTH);

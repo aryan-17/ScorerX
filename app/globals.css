@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.nav>div>svg,
+.nav>div>p {
+    cursor: pointer;
+    display: inline;
+    transition: opacity 0.3s ease;
+}
+
+.nav>div{
+    width: 60px;
+    height: 40px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.nav>div>p {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none; /* to prevent interaction with hidden text */
+    transition: opacity 0.3s ease;
+    font-weight: 600;
+    padding: 5px;
+    margin-bottom: 4px;
+}
+
+.nav>div:hover>p {
+    opacity: 1;
+    pointer-events: auto; /* allow interaction when text is visible */
+    /* background-color: #2a9d8fff; */
+}
+
+.nav>div:hover>svg {
+    opacity: 0;
+}

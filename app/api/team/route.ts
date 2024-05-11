@@ -32,7 +32,12 @@ export async function GET(req: NextRequest) {
         userId: userId,
       },
       include: {
-        team: true,
+        team: {
+          include:{
+            players:true,
+            matchId:true
+          }
+        }
       },
     });
 
@@ -42,6 +47,7 @@ export async function GET(req: NextRequest) {
       },
       include: {
         players: true,
+        matchId:true
       },
     });
 
@@ -83,6 +89,24 @@ export async function POST(req: NextRequest) {
       },
     });
     console.log("Profile---------->", profile);
+
+    const existingTeam = await prisma.profile.findFirst({
+      where:{
+        userId:userId
+      },
+      include:{
+        team:true
+      }
+    })
+
+    if(existingTeam?.team !== null){
+      return Response.json({
+        success:false,
+        message:"You are already in a team"
+      },{
+        status:400
+      })
+    }
 
     const teamCreated = await prisma.team.create({
       data: {

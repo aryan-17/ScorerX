@@ -38,8 +38,8 @@ model Profile {
   Wicket  Int?    @default(0)
   Matches Int?    @default(0)
   captain Boolean @default(false)
-  umpire  Game?   @relation(name: "UmpireToProfile", fields: [gameId], references: [id])
-  gameId  Int?    @unique
+  umpire  Game?   @relation(name: "UmpireToProfile", fields: [umpireId], references: [id])
+  umpireId  Int?    @unique
   user    User    @relation(name: "ProfileToUser", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId  String  @unique
   team    Team?   @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onUpdate: Cascade) // ON DELETE >???
@@ -61,11 +61,11 @@ model Team {
 
 model Game {
   id        Int      @id @default(autoincrement())
-  date      DateTime
   teams     Team[]   @relation(name: "GameToTeam")
   umpire    Profile? @relation(name: "UmpireToProfile")
   overs     Int
-  scoreCard Json
+  scoreCard Json?
+  finished Boolean   @default(false)
 }
 
 model Otp {

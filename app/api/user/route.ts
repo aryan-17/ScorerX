@@ -5,6 +5,7 @@ import { NEXT_AUTH } from "@/lib/auth";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { fetchJwt } from "@/services/utils/fetchJwt";
 
+// User Data
 export async function GET(req: NextRequest) {
   try {
     // const session = await getServerSession(NEXT_AUTH);
@@ -69,6 +70,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// Delete User
 export async function DELETE(req: NextRequest) {
   try {
     const { userId } = await req.json();
@@ -135,9 +137,10 @@ export async function DELETE(req: NextRequest) {
   }
 }
 
+// Update User Details
 export async function PATCH(req: NextRequest) {
   try {
-    const { id, firstName, lastName, photoUrl, DOB, gender } = await req.json();
+    const { id, firstName, lastName, DOB, gender } = await req.json();
 
     if (!firstName || !lastName || !DOB || !gender) {
       return Response.json(
@@ -160,9 +163,6 @@ export async function PATCH(req: NextRequest) {
       data: {
         FirstName: firstName,
         LastName: lastName,
-        photoUrl:
-          photoUrl ||
-          `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
         DOB: dateOfBirth,
         Gender: gender,
       },
