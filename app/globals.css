@@ -22,8 +22,8 @@
     opacity: 0;
     pointer-events: none; /* to prevent interaction with hidden text */
     transition: opacity 0.3s ease;
-    font-weight: 600;
     padding: 5px;
+    font-size: larger;
     margin-bottom: 4px;
 }
 
