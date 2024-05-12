@@ -6,7 +6,7 @@
 .nav>div>p {
     cursor: pointer;
     display: inline;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.8s ease;
 }
 
 .nav>div{
@@ -21,7 +21,7 @@
     position: absolute;
     opacity: 0;
     pointer-events: none; /* to prevent interaction with hidden text */
-    transition: opacity 0.3s ease;
+    transition: opacity 0.8s ease;
     padding: 5px;
     font-size: larger;
     margin-bottom: 4px;
