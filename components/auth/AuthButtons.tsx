@@ -6,7 +6,7 @@ interface Props{
 
 const AuthButtons:FC<Props> = ({text}) => {
   return (
-    <div className="border-2-solid border-richblack-200">
+    <div className="bg-persiangreen w-60 p-2 rounded-2xl text-center cursor-pointer text-lg font-semibold">
       {text}
     </div>
   )

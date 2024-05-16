@@ -2,10 +2,14 @@
 
 import Image from "next/image";
 import main_logo from "@/assests/logo/main_logo.png";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+
+  const router = useRouter();
+
   return (
-    <div className="flex justify-between text-lg px-20 pt-5 bg-[#E8D6CA]">
+    <div className="flex justify-between text-lg px-20 py-4 bg-[#E8D6CA]">
       {/* Logo */}
       <div>
         <Image
@@ -18,7 +22,7 @@ const Header = () => {
       </div>
 
       <div className="flex gap-20 nav items-center text-persiangreen">
-        <div>
+        <div onClick={()=> router.push("/")}>
           <p>Home</p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -41,9 +45,9 @@ const Header = () => {
             viewBox="0 0 24 24"
             fill="none"
             stroke="#2A9D8F"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="icon icon-tabler icons-tabler-outline icon-tabler-friends"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -62,9 +66,9 @@ const Header = () => {
             viewBox="0 0 24 24"
             fill="none"
             stroke="#2A9D8F"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="icon icon-tabler icons-tabler-outline icon-tabler-device-gamepad"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -84,33 +88,14 @@ const Header = () => {
             viewBox="0 0 24 24"
             fill="none"
             stroke="#2A9D8F"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="icon icon-tabler icons-tabler-outline icon-tabler-device-tv"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M3 7m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
             <path d="M16 3l-4 4l-4 -4" />
-          </svg>
-        </div>
-        <div>
-          <p>Contact Us</p>
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#2A9D8F"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            className="icon icon-tabler icons-tabler-outline icon-tabler-phone"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
           </svg>
         </div>
       </div>
@@ -126,9 +111,9 @@ const Header = () => {
             viewBox="0 0 24 24"
             fill="none"
             stroke="#2A9D8F"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="icon icon-tabler icons-tabler-outline icon-tabler-login-2"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -137,7 +122,7 @@ const Header = () => {
             <path d="M13 15l3 -3" />
           </svg>
         </div>
-        <div>
+        <div onClick={()=> router.push("/auth/signUp")}>
           <p>Sign Up</p>
 
           <svg
@@ -147,9 +132,9 @@ const Header = () => {
             viewBox="0 0 24 24"
             fill="none"
             stroke="#2A9D8F"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="icon icon-tabler icons-tabler-outline icon-tabler-pencil-minus"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />

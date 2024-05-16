@@ -1,16 +1,16 @@
 [
     {
-        "svg":"<svg  xmlns='http://www.w3.org/2000/svg'  width='24'  height='24'  viewBox='0 0 24 24'  fill='none'  stroke='#2a9d8f'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'  class='icon icon-tabler icons-tabler-outline icon-tabler-building-stadium'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M12 12m-8 0a8 2 0 1 0 16 0a8 2 0 1 0 -16 0' /><path d='M4 12v7c0 .94 2.51 1.785 6 2v-3h4v3c3.435 -.225 6 -1.07 6 -2v-7' /><path d='M15 6h4v-3h-4v7' /><path d='M7 6h4v-3h-4v7' /></svg>",
+        "svg":"<svg  xmlns='http://www.w3.org/2000/svg'  width='24'  height='24'  viewBox='0 0 24 24'  fill='none'  stroke='#2a9d8f'  strokeWidth='2'  strokeLinecap='round'  strokeLinejoin='round'  class='icon icon-tabler icons-tabler-outline icon-tabler-building-stadium'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M12 12m-8 0a8 2 0 1 0 16 0a8 2 0 1 0 -16 0' /><path d='M4 12v7c0 .94 2.51 1.785 6 2v-3h4v3c3.435 -.225 6 -1.07 6 -2v-7' /><path d='M15 6h4v-3h-4v7' /><path d='M7 6h4v-3h-4v7' /></svg>",
         "title":"Team Game",
         "desc":"People act together to achieve a common purpose."
     },
     {
-        "svg":"<svg  xmlns='http://www.w3.org/2000/svg'  width='24'  height='24'  viewBox='0 0 24 24'  fill='none'  stroke='#2a9d8f'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'  class='icon icon-tabler icons-tabler-outline icon-tabler-radio'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M14 3l-9.371 3.749a1 1 0 0 0 -.629 .928v11.323a1 1 0 0 0 1 1h14a1 1 0 0 0 1 -1v-11a1 1 0 0 0 -1 -1h-14.5' /><path d='M4 12h16' /><path d='M7 12v-2' /><path d='M17 16v.01' /><path d='M13 16v.01' /></svg>",
+        "svg":"<svg  xmlns='http://www.w3.org/2000/svg'  width='24'  height='24'  viewBox='0 0 24 24'  fill='none'  stroke='#2a9d8f'  strokeWidth='2'  strokeLinecap='round'  strokeLinejoin='round'  class='icon icon-tabler icons-tabler-outline icon-tabler-radio'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M14 3l-9.371 3.749a1 1 0 0 0 -.629 .928v11.323a1 1 0 0 0 1 1h14a1 1 0 0 0 1 -1v-11a1 1 0 0 0 -1 -1h-14.5' /><path d='M4 12h16' /><path d='M7 12v-2' /><path d='M17 16v.01' /><path d='M13 16v.01' /></svg>",
         "title":"Official Match",
         "desc":"A match that was held officially and certainly attracted a lot of time."
     },
     {
-        "svg":"<svg  xmlns='http://www.w3.org/2000/svg'  width='24'  height='24'  viewBox='0 0 24 24'  fill='none'  stroke='#2a9d8f'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'  class='icon icon-tabler icons-tabler-outline icon-tabler-cricket'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M11.105 18.79l-1 .992a4.159 4.159 0 0 1 -6.038 -5.715l.157 -.166l8.282 -8.401l1.5 1.5l3.45 -3.391a2.08 2.08 0 0 1 3.057 2.815l-.116 .126l-3.391 3.45l1.5 1.5l-3.668 3.617' /><path d='M10.5 7.5l6 6' /><path d='M14 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0' /></svg>",
+        "svg":"<svg  xmlns='http://www.w3.org/2000/svg'  width='24'  height='24'  viewBox='0 0 24 24'  fill='none'  stroke='#2a9d8f'  strokeWidth='2'  strokeLinecap='round'  strokeLinejoin='round'  class='icon icon-tabler icons-tabler-outline icon-tabler-cricket'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M11.105 18.79l-1 .992a4.159 4.159 0 0 1 -6.038 -5.715l.157 -.166l8.282 -8.401l1.5 1.5l3.45 -3.391a2.08 2.08 0 0 1 3.057 2.815l-.116 .126l-3.391 3.45l1.5 1.5l-3.668 3.617' /><path d='M10.5 7.5l6 6' /><path d='M14 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0' /></svg>",
         "title":"Sportsmanship",
         "desc":"Compete in a fairly and healthily in behaviour and play in matches."
     },

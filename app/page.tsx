@@ -143,12 +143,34 @@ export default function Home() {
                     className=""
                     dangerouslySetInnerHTML={{ __html: ele.svg }}
                   ></div>
-                  <div className="text-xl text-charcoal font-bold">{ele.title}</div>
+                  <div className="text-xl text-charcoal font-bold">
+                    {ele.title}
+                  </div>
                 </div>
                 <div className="text-charcoal">{ele.desc}</div>
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Contact Us */}
+
+      <div className="mt-20 flex flex-col items-center">
+        <div className="text-4xl font-bold flex flex-col items-center">
+          <span>Find Out More </span>
+          <span>About Us</span>
+        </div>
+        <div className="border-t-4 w-[3rem] mt-2 border-persiangreen"></div>
+        <div className="mt-10 flex gap-10">
+          <input
+            type="text"
+            className="w-60 h-10 rounded-md focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+            placeholder="Type Something For Us..."
+          />
+          <button className="h-10 bg-persiangreen w-40 rounded-md ">
+            Send
+          </button>
         </div>
       </div>
     </div>
