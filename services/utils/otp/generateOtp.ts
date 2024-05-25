@@ -1,3 +1,4 @@
+"use server"
 import otpGenerator from "otp-generator";
 import prisma from "@/db/client";
 
@@ -21,5 +22,5 @@ export default async function generateOtp() {
           specialChars: false,
         });
       }
-      return otp;
+      return String(otp);
 }

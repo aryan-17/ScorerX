@@ -17,7 +17,7 @@ export const NEXT_AUTH:NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: {
+        email: {
           label: "Email",
           type: "text",
           placeholder: "Enter your Email",
@@ -28,12 +28,12 @@ export const NEXT_AUTH:NextAuthOptions = {
           placeholder: "Enter your Password",
         },
       },
-      async authorize(credentials: Record<"username" | "password", string>) {
+      async authorize(credentials: Record<"email" | "password", string>) {
         try {
 
           const userDb = await prisma.user.findFirst({
             where: {
-              email: credentials.username,
+              email: credentials.email,
             },
             select: {
               id: true,
@@ -48,13 +48,13 @@ export const NEXT_AUTH:NextAuthOptions = {
             userDb.password &&
             (await bcrypt.compare(credentials.password, userDb.password))
           ) {
-            const token = await generateJwt({id:userDb.id});
+            const token = await generateJwt({id:userDb.id});            
 
             return {
               id: userDb.id,
               firstName: userDb.FirstName,
               lastName: userDb.LastName,
-              email: credentials.username,
+              email: credentials.email,
               token: token,
             };
           }
@@ -67,16 +67,21 @@ export const NEXT_AUTH:NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  pages:{
+    signIn:"/auth/login"
+  },
   secret: process.env.NEXTAUTH_SECRET || "secr3t",
   callbacks: {
     session: ({ session, token }: any) => {   
-      
+      console.log(session);
       if (session?.user) {
         session.accessToken = token.token;     
       }
       return session;
     },
     jwt: ({ token, user }: any) => {
+      console.log(token);
+      
       if (user) {
         token.token = user.token;
       }

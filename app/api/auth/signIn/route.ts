@@ -4,21 +4,28 @@ import bcrypt from "bcrypt";
 
 export async function POST(req: NextRequest) {
   try {
-    const {
-      firstName,
+    const {data, email} = await req.json();
+
+    const{firstName,
       lastName,
-      email,
       password,
       confirmPassword,
       gender,
-      dob,
-    } = await req.json();
+      dob} = data;
+
+      console.log(firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+        gender,
+        dob);
+      
 
     const dateOfBirth = new Date(dob);
 
     if (
       !firstName ||
-      !lastName ||
       !email ||
       !password ||
       !confirmPassword ||
@@ -50,19 +57,22 @@ export async function POST(req: NextRequest) {
     }
 
     const checkVerified = await prisma.verification.findFirst({
-      where:{
-        email:email,
-        verified:true
-      }
-    })
+      where: {
+        email: email,
+        verified: true,
+      },
+    });
 
-    if(!checkVerified){
-      return Response.json({
-        success:false,
-        message:"User not verified"
-      },{
-        status:400
-      })
+    if (!checkVerified) {
+      return Response.json(
+        {
+          success: false,
+          message: "User not verified",
+        },
+        {
+          status: 400,
+        }
+      );
     }
 
     const existingUser = await prisma.user.findFirst({
@@ -85,13 +95,13 @@ export async function POST(req: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const image = `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`;
-    
+
     let result;
     await prisma.$transaction(async (tx) => {
       const userCreated = await tx.user.create({
         data: {
           FirstName: firstName,
-          LastName: lastName,
+          LastName: lastName || null,
           email: email,
           password: hashedPassword,
           photoUrl: image,
@@ -101,24 +111,27 @@ export async function POST(req: NextRequest) {
       });
 
       const profileCreated = await tx.profile.create({
-        data:{
-            userId:userCreated.id
-        }
-      })
+        data: {
+          userId: userCreated.id,
+        },
+      });
 
-      result = {userCreated, profileCreated};
+      result = { userCreated, profileCreated };
     });
 
-    return Response.json({
-      success: true,
-      data: result,
-      message: "User Created",
-    },{
-      status:200
-    });
+    return Response.json(
+      {
+        success: true,
+        data: result,
+        message: "User Created",
+      },
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     console.log(error);
-    
+
     return Response.json(
       {
         success: false,

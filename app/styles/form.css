@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.form-items{
+    @apply flex flex-col gap-y-4
+}
+
+input{
+    @apply rounded-md
+}
+
+.form-items>div{
+    @apply flex flex-col gap-y-2
+}
+
+.form-items>div>input{
+    @apply border-[1px] border-richblack-200 focus:outline-none focus:ring-0 w-fit p-[2px]
+}
+
+.form-items>div>span, .password>div>span{
+    @apply text-sm !text-peach flex
+}
+
+.password{
+    @apply !flex !flex-row !gap-x-20
+}
+
+.password>div{
+    @apply gap-y-2
+}
+
+.password>div>input{
+    @apply border-[1px] border-richblack-200 focus:outline-none focus:ring-0 p-[2px]
+}
+
+::placeholder{
+    @apply text-sm
+}

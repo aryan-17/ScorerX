@@ -3,6 +3,8 @@
 import Image from "next/image";
 import main_logo from "@/assests/logo/main_logo.png";
 import { useRouter } from "next/navigation";
+import "@/app/styles/nav_bar.css"
+import { signIn } from "next-auth/react";
 
 const Header = () => {
 
@@ -101,7 +103,7 @@ const Header = () => {
       </div>
 
       <div className="flex gap-10 nav items-center text-persiangreen">
-        <div>
+        <div onClick={()=> signIn()}>
           <p>Log In</p>
 
           <svg

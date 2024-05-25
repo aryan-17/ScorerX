@@ -1,6 +1,6 @@
+"use server"
 import mailSender from "@/services/utils/mailSender"
 import emailTemplate from "@/mail/templates/emailVerify"
-
 
 export default async function sendVerificationMail(email:string, otp:string) {
     try{
@@ -14,10 +14,7 @@ export default async function sendVerificationMail(email:string, otp:string) {
         console.log(mailResponse);
         
 
-        return Response.json({
-            success:true,
-            message:mailResponse
-        })
+        return ;
         
     }
     catch(error){
