@@ -19,11 +19,11 @@ export default function RootLayout({
       <body className="bg-white font-mono flex flex-col min-h-screen">
         <RecoilRoot>
           <Toaster />
-          <Header />
           <Providers>
+            <Header />
             {children}
+            <Footer />
           </Providers>
-          <Footer />
         </RecoilRoot>
       </body>
     </html>

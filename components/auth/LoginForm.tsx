@@ -42,7 +42,7 @@ const LoginForm = () => {
         toast.error("Invalid Credentials");
       } else {
         toast.success("Login successful!");
-        router.push("/");
+        router.push("/profile");
       }
     } catch (error) {
       if (isAxiosError(error)) {

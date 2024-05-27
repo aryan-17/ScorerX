@@ -5,3 +5,7 @@ export const authEndPoints = {
     SENDOTP_API: BASE_URL + 'api/auth/otp',
     VERIFY_OTP_API: BASE_URL + 'api/auth/otp/verification'
 };
+
+export const userEndPoints = {
+    USER_DETAILS: BASE_URL + 'api/user'
+}

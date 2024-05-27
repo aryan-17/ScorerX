@@ -9,6 +9,7 @@ import { generateJwt } from "@/services/utils/generateJwt";
 declare module 'next-auth' {
   interface Session extends DefaultSession {
     accessToken: string;
+    image:string;
   }
 }
 
@@ -40,6 +41,7 @@ export const NEXT_AUTH:NextAuthOptions = {
               FirstName: true,
               LastName: true,
               password: true,
+              photoUrl:true
             },
           });
 
@@ -56,6 +58,7 @@ export const NEXT_AUTH:NextAuthOptions = {
               lastName: userDb.LastName,
               email: credentials.email,
               token: token,
+              photoUrl:userDb.photoUrl
             };
           }
         } catch (error) {
@@ -71,21 +74,29 @@ export const NEXT_AUTH:NextAuthOptions = {
     signIn:"/auth/login"
   },
   secret: process.env.NEXTAUTH_SECRET || "secr3t",
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET || "secr3t",
+  },
   callbacks: {
-    session: ({ session, token }: any) => {   
-      console.log(session);
-      if (session?.user) {
-        session.accessToken = token.token;     
-      }
-      return session;
-    },
-    jwt: ({ token, user }: any) => {
-      console.log(token);
-      
+    async jwt ({ token, user }: any){      
       if (user) {
         token.token = user.token;
+        token.name = user.firstName;
+        token.photoUrl = user.photoUrl;
       }
+      console.log("token---------->",token);
+      
       return token;
+    },
+    async session ({ session, token }: any){   
+      if (session?.user) {
+        session.accessToken = token.token; 
+        session.name = token.name;
+        session.image = token.photoUrl;
+      }
+      console.log("Session----------->",session);
+      
+      return session;
     },
   },
 };
