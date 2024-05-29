@@ -2,33 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/db/client";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH } from "@/lib/auth";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { fetchJwt } from "@/services/utils/fetchJwt";
+import { redirect } from "next/navigation";
 
 // User Data
 export async function GET(req: NextRequest) {
   try {
-    // const session = await getServerSession(NEXT_AUTH);
-    // const token = session?.accessToken;
-
-    const url = new URL(req.url);
-    const token = url.searchParams.get("token");
+    const session = await getServerSession(NEXT_AUTH);
     
-    
-    if (!token) {
-      // Redirect
-      return Response.json(
-        {
-          success: false,
-          message: "Logged Out",
-        },
-        {
-          status: 401,
-        }
-      );
+    if(!session?.user){
+      return redirect("/login");
     }
 
-    const userId = await fetchJwt(token);
+    const userId = session.id;
+
 
     const userDetails = await prisma.user.findFirst({
       where: {
@@ -41,15 +27,28 @@ export async function GET(req: NextRequest) {
         photoUrl: true,
         Gender: true,
         DOB: true,
-      },
+        ownedTeams:true,
+        profile:{
+          include:{
+            team:{
+              include:{
+                players:{
+                  include:{
+                    user:true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     });
-
-    console.log(userDetails);
 
     return Response.json(
       {
         success: true,
         message: "Fetched User Data",
+        data:userDetails
       },
       {
         status: 200,

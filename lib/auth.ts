@@ -10,6 +10,7 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     accessToken: string;
     image:string;
+    id:string;
   }
 }
 
@@ -81,7 +82,7 @@ export const NEXT_AUTH:NextAuthOptions = {
     async jwt ({ token, user }: any){      
       if (user) {
         token.token = user.token;
-        token.name = user.firstName;
+        token.userId = user.id;
         token.photoUrl = user.photoUrl;
       }
       console.log("token---------->",token);
@@ -91,7 +92,7 @@ export const NEXT_AUTH:NextAuthOptions = {
     async session ({ session, token }: any){   
       if (session?.user) {
         session.accessToken = token.token; 
-        session.name = token.name;
+        session.id = token.userId;
         session.image = token.photoUrl;
       }
       console.log("Session----------->",session);

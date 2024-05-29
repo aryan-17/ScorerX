@@ -3,6 +3,7 @@ import prisma from "@/db/client";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH } from "@/lib/auth";
 import { fetchJwt } from "@/services/utils/fetchJwt";
+import { redirect } from "next/navigation";
 
 // Get All teams
 export async function GET(req: NextRequest) {
@@ -148,23 +149,13 @@ export async function POST(req: NextRequest) {
 // Delete Team
 export async function DELETE(req: NextRequest) {
   try {
-    // const session = await getServerSession(NEXT_AUTH);
-    // const token = session?.accessToken;
-    const { token } = await req.json();
-
-    if (!token) {
-      return Response.json(
-        {
-          success: false,
-          message: "Logged Out",
-        },
-        {
-          status: 401,
-        }
-      );
+    const session = await getServerSession(NEXT_AUTH);
+    
+    if(!session?.user){
+      return redirect("/login");
     }
 
-    const userId = await fetchJwt(token);
+    const userId = session.id;
 
     const deletedTeam = await prisma.team.delete({
       where: {

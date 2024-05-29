@@ -41,7 +41,7 @@ const Header = () => {
           </svg>
         </div>
         <div>
-          <p>Teams</p>
+          <p>Team</p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

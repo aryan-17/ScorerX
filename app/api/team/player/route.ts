@@ -1,11 +1,21 @@
 import { NextRequest } from "next/server";
 import prisma from "@/db/client";
 import { fetchJwt } from "@/services/utils/fetchJwt";
+import { getServerSession } from "next-auth";
+import { NEXT_AUTH } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 // Add player
 export async function POST(req: NextRequest) {
   try {
-    const { firstName, lastName, token } = await req.json();
+    const { firstName, lastName } = await req.json();
+    const session = await getServerSession(NEXT_AUTH);
+    
+    if(!session?.user){
+      return redirect("/login");
+    }
+
+    const ownerId = session.id;
 
     const profile = await prisma.user.findFirst({
       where: {
@@ -22,8 +32,6 @@ export async function POST(req: NextRequest) {
         },
       },
     });
-
-    const ownerId = await fetchJwt(token);
 
     const owner = await prisma.user.findFirst({
       where: {
