@@ -13,8 +13,8 @@ import SocialMedia from "@/components/Profile/SocialMedia";
 import PersonalDetails from "@/components/Profile/PersonalDetails";
 import Stats from "@/components/Profile/Stats";
 import Graph from "@/components/Profile/Graph";
-import TeamDetails from "@/components/Profile/TeamDetails";
 import MatchHistory from "@/components/Profile/MatchHistory";
+import MatchStats from "@/components/Profile/MatchStats";
 
 export default function Profile() {
   const session = useSession();
@@ -79,7 +79,7 @@ export default function Profile() {
 
         {/* Team / Matches */}
         <div className="w-full flex flex-row h-3/5   gap-x-4">
-          <div className="w-3/5 neo"><TeamDetails/></div>
+          <div className="w-3/5 neo"><MatchStats/></div>
           <div className="w-2/5 neo"><MatchHistory/></div>
         </div>
       </div>
