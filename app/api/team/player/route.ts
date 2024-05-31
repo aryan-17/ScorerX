@@ -10,8 +10,8 @@ export async function POST(req: NextRequest) {
   try {
     const { firstName, lastName } = await req.json();
     const session = await getServerSession(NEXT_AUTH);
-    
-    if(!session?.user){
+
+    if (!session?.user) {
       return redirect("/login");
     }
 
@@ -118,6 +118,7 @@ export async function POST(req: NextRequest) {
       {
         success: true,
         message: "Player Added",
+        data:updatedTeam
       },
       {
         status: 200,

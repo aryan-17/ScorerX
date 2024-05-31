@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[#F7F8FA] font-mono flex flex-col min-h-screen">
+      <body className="bg-[#F7F8FA] font-mono flex flex-col min-h-screen ">
         <RecoilRoot>
           <Providers>
             <Header />

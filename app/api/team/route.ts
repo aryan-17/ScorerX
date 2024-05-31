@@ -5,28 +5,16 @@ import { NEXT_AUTH } from "@/lib/auth";
 import { fetchJwt } from "@/services/utils/fetchJwt";
 import { redirect } from "next/navigation";
 
-// Get All teams
+// Get teams
 export async function GET(req: NextRequest) {
   try {
-    // const session = await getServerSession(NEXT_AUTH);
-    // const token = session?.accessToken;
+    const session = await getServerSession(NEXT_AUTH);
 
-    const url = new URL(req.url);
-    const token = url.searchParams.get("token");
-
-    if (!token) {
-      return Response.json(
-        {
-          success: false,
-          message: "Logged Out",
-        },
-        {
-          status: 401,
-        }
-      );
+    if (!session?.user) {
+      return redirect("/login");
     }
 
-    const userId = await fetchJwt(token);
+    const userId = session.id;
 
     const teams = await prisma.profile.findFirst({
       where: {
@@ -34,11 +22,15 @@ export async function GET(req: NextRequest) {
       },
       include: {
         team: {
-          include:{
-            players:true,
-            matchId:true
-          }
-        }
+          include: {
+            players: {
+              include:{
+                user:true
+              }
+            },
+            matchId: true,
+          },
+        },
       },
     });
 
@@ -47,17 +39,29 @@ export async function GET(req: NextRequest) {
         ownerId: userId,
       },
       include: {
-        players: true,
-        matchId:true
+        players: {
+          include:{
+            user:true
+          }
+        },
+        matchId: true,
       },
     });
 
-    console.log("Teams in which user is a player---->", teams?.team);
-    console.log("Teams in which user is a owner---->", ownedTeams);
+    if (ownedTeams !== null) {
+      return Response.json({
+        success: true,
+        message: "Fetched Teams",
+        data:ownedTeams,
+        type:"Owner"
+      });
+    }
 
     return Response.json({
       success: true,
       message: "Fetched Teams",
+      data:teams?.team,
+      type:"Player"
     });
   } catch (error) {
     return Response.json({
@@ -70,18 +74,17 @@ export async function GET(req: NextRequest) {
 // Create Team
 export async function POST(req: NextRequest) {
   try {
-    // const session = await getServerSession(NEXT_AUTH);
-    // const token = session?.accessToken;
-    const { teamName, token } = await req.json();
+    const { teamName } = await req.json();
 
-    if (!token) {
-      return Response.json({
-        success: false,
-        message: "Logged Out",
-      });
+    const session = await getServerSession(NEXT_AUTH);
+
+    if (!session?.user) {
+      return redirect("/login");
     }
 
-    const userId = await fetchJwt(token);
+    const userId = session.id;
+
+
     console.log("User Id---------->", userId);
 
     const profile = await prisma.profile.findFirst({
@@ -92,21 +95,24 @@ export async function POST(req: NextRequest) {
     console.log("Profile---------->", profile);
 
     const existingTeam = await prisma.profile.findFirst({
-      where:{
-        userId:userId
+      where: {
+        userId: userId,
       },
-      include:{
-        team:true
-      }
-    })
+      include: {
+        team: true,
+      },
+    });
 
-    if(existingTeam?.team !== null){
-      return Response.json({
-        success:false,
-        message:"You are already in a team"
-      },{
-        status:400
-      })
+    if (existingTeam?.team !== null) {
+      return Response.json(
+        {
+          success: false,
+          message: "You are already in a team",
+        },
+        {
+          status: 400,
+        }
+      );
     }
 
     const teamCreated = await prisma.team.create({
@@ -150,8 +156,8 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const session = await getServerSession(NEXT_AUTH);
-    
-    if(!session?.user){
+
+    if (!session?.user) {
       return redirect("/login");
     }
 
@@ -265,9 +271,8 @@ export async function PATCH(req: NextRequest) {
         data: {
           captain: true,
         },
-      })
-      console.log("New Captain---->",newCaptainProfile);
-      
+      });
+      console.log("New Captain---->", newCaptainProfile);
     } else {
       const [remPrevCaptain, newUpdatedCaptain] = await prisma.$transaction([
         prisma.profile.update({

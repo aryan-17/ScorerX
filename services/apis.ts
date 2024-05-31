@@ -9,3 +9,11 @@ export const authEndPoints = {
 export const userEndPoints = {
     USER_DETAILS: BASE_URL + 'api/user'
 }
+
+export const teamEndPoints = {
+    TEAM_DETAILS: BASE_URL + 'api/team'
+}
+
+export const playerEndPoints = {
+    PLAYER_API: BASE_URL + 'api/team/player'
+}
