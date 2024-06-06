@@ -8,14 +8,13 @@ import { RiTeamFill } from "react-icons/ri";
 
 const MainCard = () => {
   const [data, setData] = useRecoilState(userData);
-  console.log(data);
 
   return (
     <div className="flex flex-col justify-center items-center gap-5 m-3 text-charcoal">
       <div className="flex flex-col items-center">
         <div>
           <Image
-            className="rounded-full"
+            className="rounded-full aspect-square"
             src={data.photoUrl}
             width={80}
             height={80}

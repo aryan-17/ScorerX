@@ -15,10 +15,13 @@ import Stats from "@/components/Profile/Stats";
 import Graph from "@/components/Profile/Graph";
 import MatchHistory from "@/components/Profile/MatchHistory";
 import MatchStats from "@/components/Profile/MatchStats";
+import EditModal from "@/components/Profile/EditModal";
+import { modal } from "@/store/atoms/modal";
 
 export default function Profile() {
   const session = useSession();
   const [data, setData] = useRecoilState(userData);
+  const [visible, setVisible] = useRecoilState(modal);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -54,33 +57,52 @@ export default function Profile() {
   if (loading || !data) return <p>Loading...</p>;
 
   return (
-    <div className="min-h-[calc(100vh-174px)] w-11/12 mx-auto flex flex-row my-10   gap-4">
-      {/* Profile */}
-      <div className="flex flex-col items-center w-1/5 gap-y-4">
-        <div className="flex-1 w-full neo">
-          <MainCard />
-        </div>
-        <div className="w-full neo">
-          <SocialMedia />
-        </div>
-        <div className="flex-1 w-full neo">
-          <PersonalDetails />
-        </div>
-      </div>
+    <div className="w-full h-full flex items-center justify-center">
+      {/* Edit Modal */}
 
-      {/* Stats */}
-      <div className="flex flex-col w-4/5 items-center gap-y-4">
-        {/* Match Stats */}
-        <div className="w-full flex flex-row h-2/5 gap-x-4">
-          <div className="w-full neo"><Stats type={"Runs"} context={data.profile?.Runs}/></div>
-          <div className="w-full neo"><Stats type={"Wickets"} context={data.profile?.Wicket}/></div>
-          <div className="w-full neo"><Graph/></div>
+      {visible && (
+        <div className="absolute w-full h-full flex justify-center items-center backdrop-blur">
+          <EditModal />
+        </div>
+      )}
+      <div className="min-h-[calc(100vh-174px)] w-11/12 mx-auto flex flex-row my-10 gap-4">
+        {/* Profile */}
+        <div className="flex flex-col items-center w-1/5 gap-y-4">
+          <div className="flex-1 w-full neo">
+            <MainCard />
+          </div>
+          <div className="w-full neo">
+            <SocialMedia />
+          </div>
+          <div className="flex-1 w-full neo">
+            <PersonalDetails />
+          </div>
         </div>
 
-        {/* Team / Matches */}
-        <div className="w-full flex flex-row h-3/5   gap-x-4">
-          <div className="w-3/5 neo"><MatchStats/></div>
-          <div className="w-2/5 neo"><MatchHistory/></div>
+        {/* Stats */}
+        <div className="flex flex-col w-4/5 items-center gap-y-4">
+          {/* Match Stats */}
+          <div className="w-full flex flex-row h-2/5 gap-x-4">
+            <div className="w-full neo">
+              <Stats type={"Runs"} context={data.profile?.Runs} />
+            </div>
+            <div className="w-full neo">
+              <Stats type={"Wickets"} context={data.profile?.Wicket} />
+            </div>
+            <div className="w-full neo">
+              <Graph />
+            </div>
+          </div>
+
+          {/* Team / Matches */}
+          <div className="w-full flex flex-row h-3/5   gap-x-4">
+            <div className="w-3/5 neo">
+              <MatchStats />
+            </div>
+            <div className="w-2/5 neo">
+              <MatchHistory />
+            </div>
+          </div>
         </div>
       </div>
     </div>

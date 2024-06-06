@@ -8,13 +8,12 @@ import { redirect } from "next/navigation";
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(NEXT_AUTH);
-    
-    if(!session?.user){
+
+    if (!session?.user) {
       return redirect("/login");
     }
 
     const userId = session.id;
-
 
     const userDetails = await prisma.user.findFirst({
       where: {
@@ -27,28 +26,28 @@ export async function GET(req: NextRequest) {
         photoUrl: true,
         Gender: true,
         DOB: true,
-        ownedTeams:true,
-        profile:{
-          include:{
-            team:{
-              include:{
-                players:{
-                  include:{
-                    user:true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+        ownedTeams: true,
+        profile: {
+          include: {
+            team: {
+              include: {
+                players: {
+                  include: {
+                    user: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
 
     return Response.json(
       {
         success: true,
         message: "Fetched User Data",
-        data:userDetails
+        data: userDetails,
       },
       {
         status: 200,
@@ -139,13 +138,20 @@ export async function DELETE(req: NextRequest) {
 // Update User Details
 export async function PATCH(req: NextRequest) {
   try {
-    const { id, firstName, lastName, DOB, gender } = await req.json();
+    const { firstName, lastName, role, photoUrl } = await req.json();
+    const session = await getServerSession(NEXT_AUTH);
 
-    if (!firstName || !lastName || !DOB || !gender) {
+    if (!session?.user) {
+      return redirect("/login");
+    }
+
+    const userId = session.id;
+
+    if (!firstName) {
       return Response.json(
         {
           success: false,
-          message: "All fields are required",
+          message: "First Name can not be empty.",
         },
         {
           status: 400,
@@ -153,21 +159,39 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    const dateOfBirth = new Date(DOB);
+    if (role) {
+      const updatedRole = await prisma.profile.update({
+        where: {
+          userId: userId,
+        },
+        data: {
+          Role: role,
+        },
+      });
+    }
+
+    if (!photoUrl) {
+      const updateUser = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          FirstName: firstName,
+          LastName: lastName,
+        },
+      });
+    }
 
     const updateUser = await prisma.user.update({
       where: {
-        id: id,
+        id: userId,
       },
       data: {
         FirstName: firstName,
         LastName: lastName,
-        DOB: dateOfBirth,
-        Gender: gender,
+        photoUrl: photoUrl,
       },
     });
-    console.log(updateUser);
-
     return Response.json(
       {
         success: true,

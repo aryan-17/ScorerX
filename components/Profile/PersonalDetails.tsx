@@ -5,15 +5,23 @@ import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
 import { useRecoilState } from "recoil";
 import { FaBirthdayCake } from "react-icons/fa";
 import capitalise from "@/services/utils/capitalise";
+import { useRouter } from "next/navigation";
+import { modal } from "@/store/atoms/modal";
 
 const PersonalDetails = () => {
   const [data, setData] = useRecoilState(userData);
+  const [visible, setVisible] = useRecoilState(modal);
+  const router = useRouter();
   const date = new Date(data.DOB);
   const options = {
     day: "2-digit" as "2-digit",
     month: "long" as "long",
   };
   const formattedDate = date.toLocaleDateString("en-US", options);
+  function handleClick(): void {
+    setVisible(true);
+  }
+
   return (
     <div className="flex flex-col gap-y-10 justify-evenly h-full">
       <div className="flex flex-col items-center mt-2">
@@ -35,8 +43,10 @@ const PersonalDetails = () => {
           {formattedDate}
         </div>
       </div>
-      <div className="w-full flex justify-center">
-        <button className="rounded-xl bg-[#254450] text-white p-[5px]">Edit Profile</button>
+      <div className="w-full flex justify-center" onClick={handleClick}>
+        <button className="rounded-xl bg-[#254450] text-white p-[5px]">
+          Edit Profile
+        </button>
       </div>
     </div>
   );

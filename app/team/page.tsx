@@ -16,8 +16,8 @@ import DisplayTeam from "@/components/Team/DisplayTeam";
 export default function Team() {
   const [teamData, setTeamData] = useRecoilState(team);
   const [loading, setLoading] = useState(false);
+  const [checkOwner, setCheckOwner] = useState(false);
   const session = useSession();
-  let checkOwner = false;
 
   useEffect(() => {
     const fetchTeam = async () => {
@@ -27,10 +27,7 @@ export default function Team() {
 
       try {
         setLoading(true);
-        const response = (await apiConnector(
-          "GET",
-          teamEndPoints.TEAM_DETAILS
-        )) as any;
+        const response = await apiConnector("GET", teamEndPoints.TEAM_DETAILS) as any;
 
         setTeamData(response.data.data);
         toast.success(response.data.message, {
@@ -49,19 +46,21 @@ export default function Team() {
         setLoading(false);
       }
     };
-    fetchTeam();
-  }, []);
 
-  // console.log(teamData);
-  if (session && session.data) {
-    checkOwner = session.data.id === teamData.ownerId;
-  }
+    fetchTeam();
+  }, [session, setTeamData]);
+
+  useEffect(() => {
+    if (session && teamData && session.data) {
+      setCheckOwner(session.data.id === teamData.ownerId);
+    }
+  }, [session, teamData]);
 
   if (loading || !teamData) return <p>Loading...</p>;
 
   return (
     <div className="min-h-[calc(100vh-174px)] my-10 mx-20  border-[2px] border-pure-greys-100 flex flex-col neo bg-white">
-      {!team ? <CreateTeam /> : (checkOwner) ? (<MyTeam/>) : (<DisplayTeam/>)}
+      {!team ? <CreateTeam /> : checkOwner ? <MyTeam /> : <DisplayTeam />}
     </div>
   );
 }
