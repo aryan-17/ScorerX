@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
                 user:true
               }
             },
-            matchId: true,
+            Game: true,
           },
         },
       },
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
             user:true
           }
         },
-        matchId: true,
+        Game: true,
       },
     });
 

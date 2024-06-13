@@ -5,8 +5,6 @@ import main_logo from "@/assests/logo/main_logo.png";
 import { useRouter } from "next/navigation";
 import "@/app/styles/nav_bar.css";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { apiConnector } from "@/services/apiConnector";
-import { userEndPoints } from "@/services/apis";
 
 const Header = () => {
   const router = useRouter();
@@ -61,7 +59,7 @@ const Header = () => {
             <path d="M15 22v-4h-2l2 -6a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1l2 6h-2v4" />
           </svg>
         </div>
-        <div>
+        <div onClick={()=> router.push("/matches")}>
           <p>Matches</p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -173,27 +171,39 @@ const Header = () => {
               <path d="M16 19h6" />
             </svg>
           </div>
-        ) : (session.status === "loading")?(<div onClick={() => router.push("/auth/signUp")}>
-        <p>Sign Up</p>
+        ) : session.status === "loading" ? (
+          <div onClick={() => router.push("/auth/signUp")}>
+            <p>Sign Up</p>
 
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#2A9D8F"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="icon icon-tabler icons-tabler-outline icon-tabler-pencil-minus"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-          <path d="M13.5 6.5l4 4" />
-          <path d="M16 19h6" />
-        </svg>
-      </div>):(<div onClick={()=>router.push("/profile")}><Image src={session.data?.image ?? ''} className="rounded-full cursor-pointer" alt="User Profile" width={40} height={40}/></div>)}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#2A9D8F"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="icon icon-tabler icons-tabler-outline icon-tabler-pencil-minus"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+              <path d="M13.5 6.5l4 4" />
+              <path d="M16 19h6" />
+            </svg>
+          </div>
+        ) : (
+          <div onClick={() => router.push("/profile")}>
+            <Image
+              src={session.data?.image ?? ""}
+              className="rounded-full cursor-pointer aspect-square"
+              alt="User Profile"
+              width={40}
+              height={40}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

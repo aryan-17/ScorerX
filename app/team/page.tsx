@@ -27,7 +27,10 @@ export default function Team() {
 
       try {
         setLoading(true);
-        const response = await apiConnector("GET", teamEndPoints.TEAM_DETAILS) as any;
+        const response = (await apiConnector(
+          "GET",
+          teamEndPoints.TEAM_DETAILS
+        )) as any;
 
         setTeamData(response.data.data);
         toast.success(response.data.message, {
@@ -55,12 +58,13 @@ export default function Team() {
       setCheckOwner(session.data.id === teamData.ownerId);
     }
   }, [session, teamData]);
+  
 
-  if (loading || !teamData) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div className="min-h-[calc(100vh-174px)] my-10 mx-20  border-[2px] border-pure-greys-100 flex flex-col neo bg-white">
-      {!team ? <CreateTeam /> : checkOwner ? <MyTeam /> : <DisplayTeam />}
+      {!teamData ? <CreateTeam /> : checkOwner ? <MyTeam /> : <DisplayTeam />}
     </div>
   );
 }

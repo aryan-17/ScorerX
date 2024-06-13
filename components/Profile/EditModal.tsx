@@ -134,7 +134,7 @@ const EditModal = () => {
                   height={40}
                   src={photoUrl}
                   alt="pfp"
-                  className="rounded-full"
+                  className="rounded-full aspect-square"
                 />
               </div>
               <div>

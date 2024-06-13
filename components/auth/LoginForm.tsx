@@ -55,6 +55,7 @@ const LoginForm = () => {
       }
     } finally {
       setLoading(false);
+      window.location.reload();
     }
   };
 

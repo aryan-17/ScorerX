@@ -33,6 +33,7 @@ const CreateTeam = () => {
       }
     } finally {
       setLoading(false);
+      window.location.reload();
     }
   };
 

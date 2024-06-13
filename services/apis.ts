@@ -17,3 +17,7 @@ export const teamEndPoints = {
 export const playerEndPoints = {
     PLAYER_API: BASE_URL + 'api/team/player'
 }
+
+export const matchEndPoints = {
+    MATCH_API: BASE_URL + 'api/game'
+}

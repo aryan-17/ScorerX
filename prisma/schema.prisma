@@ -49,7 +49,7 @@ model Profile {
   umpireId       Int?    @unique
   user           User    @relation(name: "ProfileToUser", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId         String  @unique
-  team           Team?   @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onUpdate: Cascade) // ON DELETE >???
+  team           Team?   @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onUpdate: Cascade)
   teamId         Int?
 }
 
@@ -60,7 +60,8 @@ model Team {
   owner         User      @relation(name: "OwnerToUser", fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId       String    @unique
   players       Profile[] @relation(name: "ProfileToTeam")
-  matchId       Game[]    @relation(name: "GameToTeam")
+  Game          Game?      @relation(name: "GameToTeam", fields: [gameId], references: [id])
+  gameId        Int?
 
   @@unique([name, ownerId])
 }
@@ -68,6 +69,7 @@ model Team {
 model Game {
   id        Int      @id @default(autoincrement())
   teams     Team[]   @relation(name: "GameToTeam")
+  gameCode  Int      @unique
   umpire    Profile? @relation(name: "UmpireToProfile")
   overs     Int
   scoreCard Json?
