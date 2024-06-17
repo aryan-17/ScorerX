@@ -1,0 +1,86 @@
+{
+  "team1": {
+    "batsman": [
+      {
+        "playerName": {
+          "runs": 10,
+          "fours": 10,
+          "balls": 10,
+          "sixes": 10,
+          "status": "Not out",
+          "wicket": {
+            "catch": "playerName",
+            "bowled": "playerName",
+            "stumped": "playerName",
+            "runOut": "playerName"
+          }
+        }
+      }
+    ],
+    "bowler": [
+      {
+        "playerName": {
+          "overs": 10,
+          "runs": 10,
+          "wickets": 10
+        }
+      }
+    ],
+    "fallOfWickets": [
+      {
+        "playerName": "playerName",
+        "score": "10/10",
+        "overs": 10.1
+      }
+    ],
+    "extras": {
+      "wide": 10,
+      "noBall": 10,
+      "legBy": 10
+    },
+    "totalRuns": 100,
+    "wickets": 10
+  },
+  "team2": {
+    "batsman": [
+      {
+        "playerName": {
+          "runs": 10,
+          "fours": 10,
+          "balls": 10,
+          "sixes": 10,
+          "status": "Not out",
+          "wicket": {
+            "catch": "playerName",
+            "bowled": "playerName",
+            "stumped": "playerName",
+            "runOut": "playerName"
+          }
+        }
+      }
+    ],
+    "bowler": [
+      {
+        "playerName": {
+          "overs": 10,
+          "runs": 10,
+          "wickets": 10
+        }
+      }
+    ],
+    "fallOfWickets": [
+      {
+        "playerName": "playerName",
+        "score": "10/10",
+        "overs": 10.1
+      }
+    ],
+    "extras": {
+      "wide": 10,
+      "noBall": 10,
+      "legBy": 10
+    },
+    "totalRuns": 100,
+    "wickets": 10
+  }
+}
