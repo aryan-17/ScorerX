@@ -195,6 +195,7 @@ export async function PATCH(req: NextRequest) {
         teams: {
           connect: { id: ownedTeam?.id },
         },
+        started:true
       },
     });
 
@@ -239,7 +240,18 @@ export async function GET(req: NextRequest) {
       include: {
         team: {
           include:{
-            Game:true
+            Game:{
+              where:{
+                started:false
+              },
+              include:{
+                teams:{
+                  select:{
+                    name:true
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -249,7 +261,7 @@ export async function GET(req: NextRequest) {
     return Response.json({
       success:true,
       message:"Fetched Game Details",
-      data:profile?.team?.Game
+      data:profile?.team
     })
 
   } catch (error) {

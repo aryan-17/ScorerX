@@ -45,8 +45,7 @@ model Profile {
   highestRuns    Int?    @default(0)
   highestWickets Int?    @default(0)
   captain        Boolean @default(false)
-  umpire         Game?   @relation(name: "UmpireToProfile", fields: [umpireId], references: [id])
-  umpireId       Int?    @unique
+  umpire         Game?   @relation(name: "UmpireToProfile")
   user           User    @relation(name: "ProfileToUser", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId         String  @unique
   team           Team?   @relation(name: "ProfileToTeam", fields: [teamId], references: [id], onUpdate: Cascade)
@@ -70,10 +69,11 @@ model Game {
   id        Int      @id @default(autoincrement())
   teams     Team[]   @relation(name: "GameToTeam")
   gameCode  Int      @unique
-  umpire    Profile? @relation(name: "UmpireToProfile")
+  umpire    Profile? @relation(name: "UmpireToProfile", fields: [umpireId], references: [id])
+  umpireId  Int?     @unique
   overs     Int
   scoreCard Json?
-  finished  Boolean  @default(false)
+  started  Boolean  @default(false)
 }
 
 model Otp {

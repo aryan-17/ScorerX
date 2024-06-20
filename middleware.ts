@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';  // Use getToken for getting session in middleware
 
-const protectedRoutes = ['/profile', '/team', '/matches'];
+const protectedRoutes = ['/profile', '/team', '/matches', '/live'];
 const unprotectedRoutes = ['/', '/auth/login', '/auth/signUp'];
 const authRoutes = ['/auth/login', '/auth/signUp'];
 

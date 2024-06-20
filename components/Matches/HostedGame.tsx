@@ -45,9 +45,9 @@ const HostedGame = () => {
     };
 
     fetchTeam();
-  }, [session]);
-
+  }, [session]);  
   console.log(matchData);
+  
 
   if(loading){
     return <LoadingComponent/>
@@ -58,7 +58,7 @@ const HostedGame = () => {
         <div className="font-semibold text-charcoal text-2xl">Pending Matches</div>
         <div className="w-full">
           {
-            matchData ? (<MatchHistory matchData={matchData}/>) : (<div>No Current Matches</div>)
+            matchData?.Game ? (<MatchHistory matchData={matchData.Game}/>) : (<div>No Current Matches</div>)
           }
         </div>
     </div>

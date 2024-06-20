@@ -5,7 +5,7 @@ interface Match {
     id: number;
     overs: number;
     scoreCard: any | null;
-    finished: boolean;
+    started: boolean;
   }
   
   interface User {

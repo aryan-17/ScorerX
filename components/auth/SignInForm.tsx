@@ -94,10 +94,15 @@ const SignInForm: NextPage = () => {
           <input
             type="text"
             id="lastName"
-            {...register("lastName")}
+            {...register("lastName", { required: true })}
             name="lastName"
             placeholder="Last Name"
           />
+          {errors.lastName && (
+            <span>
+              <Important /> Last Name is Required
+            </span>
+          )}
         </div>
 
         <div className="password">
@@ -181,7 +186,11 @@ const SignInForm: NextPage = () => {
 
         <div>
           <label htmlFor="dob">Date of Birth</label>
-          <input type="date" className="font-light text-md" {...register("dob", { required: true })} />
+          <input
+            type="date"
+            className="font-light text-md"
+            {...register("dob", { required: true })}
+          />
           {errors.dob && (
             <span>
               <Important />

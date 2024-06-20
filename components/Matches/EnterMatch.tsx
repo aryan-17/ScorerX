@@ -1,12 +1,14 @@
 import { apiConnector } from "@/services/apiConnector";
 import { matchEndPoints } from "@/services/apis";
 import { isAxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 const EnterMatch = () => {
   const [gameCode, setGameCode] = useState<number>(0);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -22,7 +24,7 @@ const EnterMatch = () => {
       toast.success(response.data.message, {
         id: "data",
       });
-      window.location.reload();
+      router.push("/live");
     } catch (error) {
       if (isAxiosError(error)) {
         toast.error(error.response?.data.message);

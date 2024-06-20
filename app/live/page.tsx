@@ -1,72 +1,70 @@
 "use client";
 
-import { useEffect, useState, FormEvent, ChangeEvent } from "react";
-import io, { Socket } from "socket.io-client";
+import AppointUmpire from "@/components/Live/AppointUmpire";
+import LoadingComponent from "@/components/Loaders/LoadingComponent";
+import { apiConnector } from "@/services/apiConnector";
+import { liveEndPoints } from "@/services/apis";
+import { isAxiosError } from "axios";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-interface Message {
-  id: number;
-  text: string;
-}
-
-const Chat = () => {
-  const [message, setMessage] = useState<string>("");
-  const [messages, setMessages] = useState<string[]>([]);
-  const [socket, setSocket] = useState<Socket | null>(null);
+export default function Live() {
+  const session = useSession();
+  const [loading, setLoading] = useState(false);
+  const [matchData, setMatchData] = useState<any>();
 
   useEffect(() => {
-    console.log("Connecting to WebSocket server...");
-    const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL as string, {
-      transports: ["websocket"],
-    });
+    const fetchTeam = async () => {
+      if (!session) {
+        return;
+      }
 
-    newSocket.on("connect", () => {
-      console.log("Connected to WebSocket server");
-    });
+      try {
+        setLoading(true);
+        const response = (await apiConnector(
+          "GET",
+          liveEndPoints.LIVE_API
+        )) as any;
 
-    newSocket.on("message", (newMessage: string) => {
-      console.log("Received message:", newMessage);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    });
-
-    setSocket(newSocket);
-
-    // Clean up the socket connection on unmount
-    return () => {
-      console.log("Disconnecting from WebSocket server...");
-      newSocket.disconnect();
+        setMatchData(response.data.data?.Game);
+        toast.success(response.data.message, {
+          id: "data",
+        });
+      } catch (error) {
+        if (isAxiosError(error)) {
+          toast.error(error.response?.data.message);
+          console.error("An error occurred:", error.response?.data.message);
+        } else if (error instanceof Error) {
+          console.error("An error occurred:", error.message);
+        } else {
+          toast.error("An unknown error occurred");
+        }
+      } finally {
+        setLoading(false);
+      }
     };
+    fetchTeam();
   }, []);
 
-  const handleMessageSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (message.trim() && socket) {
-      socket.emit("message", message);
-      setMessage("");
-    }
-  };
+  if(loading){
+    return (<LoadingComponent/>)
+  }
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setMessage(e.target.value);
-  };
+  console.log(matchData);
+  
+
+  if(matchData && !matchData.umpireId){
+    return (<AppointUmpire gameCode={matchData.gameCode}/>)
+  }
+
+  if(!matchData){
+    return (<div>Enter a match first</div>)
+  }
 
   return (
-    <div>
-      <h1>Chat App</h1>
-      <div>
-        {messages.map((msg, index) => (
-          <div key={index}>{msg}</div>
-        ))}
-      </div>
-      <form onSubmit={handleMessageSubmit}>
-        <input
-          type="text"
-          value={message}
-          onChange={handleInputChange}
-        />
-        <button type="submit">Send</button>
-      </form>
+    <div className="min-h-[calc(100vh-174px)]">
+      Live
     </div>
   );
-};
-
-export default Chat;
+}

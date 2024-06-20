@@ -80,7 +80,7 @@ const Header = () => {
             <path d="M18 13l0 .01" />
           </svg>
         </div>
-        <div>
+        <div onClick={()=> router.push("/live")}>
           <p>Live</p>
 
           <svg

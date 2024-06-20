@@ -42,6 +42,7 @@ const LoginForm = () => {
         toast.error("Invalid Credentials");
       } else {
         toast.success("Login successful!");
+        window.location.reload();
         router.push("/profile");
       }
     } catch (error) {
@@ -55,7 +56,6 @@ const LoginForm = () => {
       }
     } finally {
       setLoading(false);
-      window.location.reload();
     }
   };
 
