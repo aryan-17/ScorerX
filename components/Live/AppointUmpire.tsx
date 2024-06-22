@@ -4,7 +4,7 @@ import { isAxiosError } from "axios";
 import React, { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
 
-const AppointUmpire = ({gameCode}:{gameCode:number}) => {
+const AppointUmpire = ({gameCode}:{gameCode:string}) => {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState<string>("");
 

@@ -72,46 +72,6 @@ const MyTeam = () => {
     }
   };
 
-  async function addHandler(fullName: string): Promise<void> {
-    let spaceIndex = fullName.indexOf(" ");
-    if (spaceIndex === -1) {
-      let firstName = fullName;
-      let lastName = "";
-      await addPlayerApi(firstName, lastName);
-      return;
-    }
-
-    let firstName = fullName.substring(0, spaceIndex);
-    let lastName = fullName.substring(spaceIndex + 1);
-    await addPlayerApi(firstName, lastName);
-    return;
-  }
-
-  async function deleteHandler(playerId: number): Promise<void> {
-    try {
-      setLoading(true);
-      console.log(playerId);
-
-      const res = (await apiConnector("DELETE", playerEndPoints.PLAYER_API, {
-        playerId,
-      })) as any;
-      console.log(res);
-      await fetchTeam();
-      toast.success(res.data.message);
-    } catch (error) {
-      if (isAxiosError(error)) {
-        toast.error(error.response?.data.message);
-        console.error("An error occurred:", error.response?.data.message);
-      } else if (error instanceof Error) {
-        console.error("An error occurred:", error.message);
-      } else {
-        toast.error("An unknown error occurred");
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
   function changeHandler(event: ChangeEvent<HTMLInputElement>): void {
     setName(event.target.value);
   }

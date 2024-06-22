@@ -84,9 +84,7 @@ export const NEXT_AUTH:NextAuthOptions = {
         token.token = user.token;
         token.userId = user.id;
         token.photoUrl = user.photoUrl;
-      }
-      console.log("token---------->",token);
-      
+      }      
       return token;
     },
     async session ({ session, token }: any){   
@@ -94,9 +92,7 @@ export const NEXT_AUTH:NextAuthOptions = {
         session.accessToken = token.token; 
         session.id = token.userId;
         session.image = token.photoUrl;
-      }
-      console.log("Session----------->",session);
-      
+      }      
       return session;
     },
   },

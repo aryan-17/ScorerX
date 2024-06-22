@@ -1,5 +1,6 @@
 {
   "team1": {
+    "name": "a",
     "batsman": [
       {
         "playerName": {
@@ -39,9 +40,11 @@
       "legBy": 10
     },
     "totalRuns": 100,
-    "wickets": 10
+    "wickets": 10,
+    "overs": 0
   },
   "team2": {
+    "name": "a",
     "batsman": [
       {
         "playerName": {
@@ -81,6 +84,7 @@
       "legBy": 10
     },
     "totalRuns": 100,
-    "wickets": 10
+    "wickets": 10,
+    "overs": 0
   }
 }

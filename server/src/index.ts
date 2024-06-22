@@ -8,24 +8,19 @@ const server: http.Server = http.createServer(app);
 const io: Server = new Server(server);
 
 app.use(cors({
-  origin:"http://localhost:3000"
+  origin:"*"
 })); // Enable CORS for all routes
 
 io.on("connection", (socket: Socket) => {
-  console.log("A user connected");
 
-  // Listen for incoming messages
-  socket.on("message", (message: string) => {
-    console.log("Received message:", JSON.parse(message));
-
-    // Broadcast the message to all connected clients
-    io.emit("message", message);
-  });
-
-  // Handle disconnection
-  socket.on("disconnect", () => {
-    console.log("A user disconnected");
-  });
+  socket.on("roomId",(room:string)=>{
+    console.log(socket.id," joined ",room);
+    socket.join(room);
+    socket.on("message", (message: string) => {
+      console.log("Received message:", JSON.parse(message));
+      io.to(room).emit("message", message);
+    });
+  })
 });
 
 const PORT =  5000;

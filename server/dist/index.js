@@ -11,19 +11,16 @@ const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server);
 app.use((0, cors_1.default)({
-    origin: "http://localhost:3000"
+    origin: "*"
 })); // Enable CORS for all routes
 io.on("connection", (socket) => {
-    console.log("A user connected");
-    // Listen for incoming messages
-    socket.on("message", (message) => {
-        console.log("Received message:", JSON.parse(message));
-        // Broadcast the message to all connected clients
-        io.emit("message", message);
-    });
-    // Handle disconnection
-    socket.on("disconnect", () => {
-        console.log("A user disconnected");
+    socket.on("roomId", (room) => {
+        console.log(socket.id, " joined ", room);
+        socket.join(room);
+        socket.on("message", (message) => {
+            console.log("Received message:", JSON.parse(message));
+            io.to(room).emit("message", message);
+        });
     });
 });
 const PORT = 5000;

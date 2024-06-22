@@ -1,18 +1,23 @@
 "use client";
 
 import AppointUmpire from "@/components/Live/AppointUmpire";
+import LiveMatch from "@/components/Live/LiveMatch";
+import Scorer from "@/components/Live/Scorer";
 import LoadingComponent from "@/components/Loaders/LoadingComponent";
 import { apiConnector } from "@/services/apiConnector";
-import { liveEndPoints } from "@/services/apis";
+import { liveEndPoints, userEndPoints } from "@/services/apis";
 import { isAxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useRecoilState } from "recoil";
+import { gameData } from "@/store/atoms/gameData";
 
 export default function Live() {
   const session = useSession();
   const [loading, setLoading] = useState(false);
-  const [matchData, setMatchData] = useState<any>();
+  const [matchData, setMatchData] = useRecoilState(gameData);
+  const [userData, setUserData] = useState<any>();
 
   useEffect(() => {
     const fetchTeam = async () => {
@@ -26,7 +31,12 @@ export default function Live() {
           "GET",
           liveEndPoints.LIVE_API
         )) as any;
+        const userResponse = (await apiConnector(
+          "GET",
+          userEndPoints.USER_DETAILS
+        )) as any;
 
+        setUserData(userResponse.data.data);
         setMatchData(response.data.data?.Game);
         toast.success(response.data.message, {
           id: "data",
@@ -47,24 +57,29 @@ export default function Live() {
     fetchTeam();
   }, []);
 
-  if(loading){
-    return (<LoadingComponent/>)
+  if (loading) {
+    return <LoadingComponent />;
   }
 
-  console.log(matchData);
-  
+  const checkUmpire = () => {
+    return userData.profile.id === matchData.umpireId;
+  };
 
-  if(matchData && !matchData.umpireId){
-    return (<AppointUmpire gameCode={matchData.gameCode}/>)
+  if (matchData && !matchData.umpireId) {
+    return <AppointUmpire gameCode={matchData.gameCode} />;
   }
 
-  if(!matchData){
-    return (<div>Enter a match first</div>)
+  if (!matchData) {
+    return <div>Enter a match first</div>;
   }
 
   return (
     <div className="min-h-[calc(100vh-174px)]">
-      Live
+      {!checkUmpire() ? (
+        <LiveMatch gameCode={matchData.gameCode} />
+      ) : (
+        <Scorer gameCode={matchData.gameCode} />
+      )}
     </div>
   );
 }

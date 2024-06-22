@@ -25,3 +25,7 @@ export const matchEndPoints = {
 export const liveEndPoints = {
     LIVE_API: BASE_URL + 'api/game/live'
 }
+
+export const scoreEndPoints = {
+    SCORE_API: BASE_URL + 'api/game/score'
+}

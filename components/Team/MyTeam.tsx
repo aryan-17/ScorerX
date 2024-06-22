@@ -123,7 +123,7 @@ const MyTeam = () => {
       <div className="border-b-2 border-pure-greys-100"></div>
 
       <div className="text-charcoal font-semibold text-xl mt-5 mx-10">
-        Members
+        {teamData.name}
       </div>
       <div className="mx-10 mt-3 flex gap-5">
         <input
