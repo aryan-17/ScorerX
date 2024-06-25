@@ -27,8 +27,12 @@ export async function GET(req: NextRequest) {
               },
               include:{
                 teams:{
-                  select:{
-                    name:true
+                  include:{
+                    players:{
+                      include:{
+                        user:true
+                      }
+                    }
                   }
                 }
               }

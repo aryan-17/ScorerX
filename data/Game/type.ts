@@ -48,6 +48,8 @@ export interface Team {
 }
 
 export interface Match {
+  scoreCard: null;
   team1: Team;
   team2: Team;
+  maxOvers: number;
 }

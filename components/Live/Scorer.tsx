@@ -1,4 +1,4 @@
-import { Match } from "@/data/Game/type";
+import { Match, Team } from "@/data/Game/type";
 import { FormEvent, useEffect, useState } from "react";
 import io from "socket.io-client";
 import sample from "@/data/Game/sample.json";
@@ -8,14 +8,33 @@ import { scoreEndPoints } from "@/services/apis";
 import { isAxiosError } from "axios";
 import toast from "react-hot-toast";
 import Toss from "./Toss";
+import { gameData } from "@/store/atoms/gameData";
+import { useRecoilState } from "recoil";
+import Dropdown from "react-dropdown";
+import LoadingComponent from "../Loaders/LoadingComponent";
+import ScoreBoard from "./ScoreBoard";
+
+export interface LineUp {
+  batting: string[];
+  bowling: string[];
+}
 
 const Scorer = ({ gameCode }: { gameCode: string }) => {
   const message = JSON.stringify(sample);
+  const [matchData, setMatchData] = useRecoilState(gameData);
   const session = useSession();
   const [loading, setLoading] = useState(false);
   const [scoreJson, setScoreJson] = useState<Match>(
     JSON.parse(localStorage.getItem("scoreJson") as string)
   );
+  const [team1LineUp, setTeam1LineUp] = useState<LineUp>({
+    batting: [],
+    bowling: [],
+  });
+  const [team2LineUp, setTeam2LineUp] = useState<LineUp>({
+    batting: [],
+    bowling: [],
+  });
 
   const socket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL as any, {
     transports: ["websocket"],
@@ -36,13 +55,6 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
     console.log(socket.id);
   });
 
-  const handleMessageSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (message.trim() && socket) {
-      socket.emit("message", message);
-    }
-  };
-
   useEffect(() => {
     const getUserDetails = async () => {
       if (!session) return;
@@ -54,7 +66,7 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
         )) as any;
 
         setScoreJson(response.data.data.scoreCard);
-        localStorage.setItem("scoreJson", JSON.stringify(response.data.data))
+        localStorage.setItem("scoreJson", JSON.stringify(response.data.data.scoreCard));
       } catch (error) {
         if (isAxiosError(error)) {
           toast.error(error.response?.data.message);
@@ -71,50 +83,55 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
     if (!scoreJson) {
       getUserDetails();
     }
-  }, []);
+  }, [scoreJson, session]);
 
-  const sendDataToDatabase = async ()=>{
-    try {
-      setLoading(true);
-      const response = (await apiConnector(
-        "PATCH",
-        scoreEndPoints.SCORE_API,
-        scoreJson
-      )) as any;
-    } catch (error) {
-      if (isAxiosError(error)) {
-        toast.error(error.response?.data.message);
-        console.error("An error occurred:", error.response?.data.message);
-      } else if (error instanceof Error) {
-        console.error("An error occurred:", error.message);
-      } else {
-        toast.error("An unknown error occurred");
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
+  // console.log(matchData);
+  console.log(scoreJson);
+  console.log(team1LineUp);
+  console.log(team2LineUp);
 
   useEffect(() => {
+    const sendDataToDatabase = async () => {
+      try {
+        setLoading(true);
+        const response = (await apiConnector(
+          "PATCH",
+          scoreEndPoints.SCORE_API,
+          scoreJson
+        )) as any;
+      } catch (error) {
+        if (isAxiosError(error)) {
+          toast.error(error.response?.data.message);
+          console.error("An error occurred:", error.response?.data.message);
+        } else if (error instanceof Error) {
+          console.error("An error occurred:", error.message);
+        } else {
+          toast.error("An unknown error occurred");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
     const interval = setInterval(() => {
       sendDataToDatabase();
-    }, 30000); 
+    }, 30000);
 
     return () => clearInterval(interval);
-  }, [scoreJson]);
+  }, [scoreJson, matchData.teams]);
 
-  console.log(scoreJson);
-
-  if (scoreJson?.team1 == null) {
-    return <Toss scoreJson={scoreJson} setScoreJson={setScoreJson} />;
+  if (!scoreJson || scoreJson.team1 == null) {
+    return (
+      <Toss
+        scoreJson={scoreJson}
+        setScoreJson={setScoreJson}
+        setTeam1LineUp={setTeam1LineUp}
+        setTeam2LineUp={setTeam2LineUp}
+      />
+    );
   }
-
   return (
     <div>
-      <h1>Chat App</h1>
-      <form onSubmit={handleMessageSubmit}>
-        <button type="submit">Send</button>
-      </form>
+      <ScoreBoard batting={scoreJson.team1} bowling={scoreJson.team2} scoreJson={scoreJson}/>
     </div>
   );
 };

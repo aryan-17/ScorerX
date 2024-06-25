@@ -62,7 +62,10 @@ export default function Live() {
   }
 
   const checkUmpire = () => {
-    return userData.profile.id === matchData.umpireId;
+    if(userData && matchData){
+      return userData.profile.id === matchData.umpireId;
+    }
+    return <LoadingComponent />;
   };
 
   if (matchData && !matchData.umpireId) {
