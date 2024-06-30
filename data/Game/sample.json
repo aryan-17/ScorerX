@@ -1,88 +1,46 @@
 {
   "team1": {
     "name": "a",
-    "batsman": [
+    "players":[
       {
-        "playerName": {
-          "runs": 10,
-          "fours": 10,
-          "balls": 10,
-          "sixes": 10,
-          "status": "Not out",
-          "wicket": {
-            "catch": "playerName",
-            "bowled": "playerName",
-            "stumped": "playerName",
-            "runOut": "playerName"
-          }
+        "name":"a",
+        "batting":{
+          "runs":0,
+          "balls":0,
+          "fours":0,
+          "sixes":0,
+          "status":"NOT OUT"
+        },
+        "bowling":{
+          "runs":0,
+          "overs":0,
+          "wickets":0
         }
       }
     ],
-    "bowler": [
-      {
-        "playerName": {
-          "overs": 10,
-          "runs": 10,
-          "wickets": 10
-        }
-      }
-    ],
-    "fallOfWickets": [
-      {
-        "playerName": "playerName",
-        "score": "10/10",
-        "overs": 10.1
-      }
-    ],
-    "extras": {
-      "wide": 10,
-      "noBall": 10,
-      "legBy": 10
-    },
     "totalRuns": 100,
     "wickets": 10,
     "overs": 0
   },
   "team2": {
     "name": "a",
-    "batsman": [
+    "players":[
       {
-        "playerName": {
-          "runs": 10,
-          "fours": 10,
-          "balls": 10,
-          "sixes": 10,
-          "status": "Not out",
-          "wicket": {
-            "catch": "playerName",
-            "bowled": "playerName",
-            "stumped": "playerName",
-            "runOut": "playerName"
-          }
+        "name":"a",
+        "batting":{
+          "runs":0,
+          "balls":0,
+          "fours":0,
+          "sixes":0,
+          "status":"NOT OUT"
+        },
+        "bowling":{
+          "runs":0,
+          "overs":0,
+          "wickets":0
         }
       }
     ],
-    "bowler": [
-      {
-        "playerName": {
-          "overs": 10,
-          "runs": 10,
-          "wickets": 10
-        }
-      }
-    ],
-    "fallOfWickets": [
-      {
-        "playerName": "playerName",
-        "score": "10/10",
-        "overs": 10.1
-      }
-    ],
-    "extras": {
-      "wide": 10,
-      "noBall": 10,
-      "legBy": 10
-    },
     "totalRuns": 100,
     "wickets": 10,
     "overs": 0

@@ -10,14 +10,7 @@ import toast from "react-hot-toast";
 import Toss from "./Toss";
 import { gameData } from "@/store/atoms/gameData";
 import { useRecoilState } from "recoil";
-import Dropdown from "react-dropdown";
-import LoadingComponent from "../Loaders/LoadingComponent";
 import ScoreBoard from "./ScoreBoard";
-
-export interface LineUp {
-  batting: string[];
-  bowling: string[];
-}
 
 const Scorer = ({ gameCode }: { gameCode: string }) => {
   const message = JSON.stringify(sample);
@@ -25,16 +18,8 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
   const session = useSession();
   const [loading, setLoading] = useState(false);
   const [scoreJson, setScoreJson] = useState<Match>(
-    JSON.parse(localStorage.getItem("scoreJson") as string)
+    // JSON.parse(localStorage.getItem("scoreJson") as string)
   );
-  const [team1LineUp, setTeam1LineUp] = useState<LineUp>({
-    batting: [],
-    bowling: [],
-  });
-  const [team2LineUp, setTeam2LineUp] = useState<LineUp>({
-    batting: [],
-    bowling: [],
-  });
 
   const socket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL as any, {
     transports: ["websocket"],
@@ -85,10 +70,8 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
     }
   }, [scoreJson, session]);
 
-  // console.log(matchData);
+  console.log(matchData);
   console.log(scoreJson);
-  console.log(team1LineUp);
-  console.log(team2LineUp);
 
   useEffect(() => {
     const sendDataToDatabase = async () => {
@@ -124,8 +107,6 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
       <Toss
         scoreJson={scoreJson}
         setScoreJson={setScoreJson}
-        setTeam1LineUp={setTeam1LineUp}
-        setTeam2LineUp={setTeam2LineUp}
       />
     );
   }

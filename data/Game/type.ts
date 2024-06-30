@@ -1,54 +1,37 @@
-export interface Wicket {
-  catch: string;
-  bowled: string;
-  stumped: string;
-  runOut: string;
+export enum Status{
+  NOT_OUT,
+  OUT
 }
 
-export interface Batsman {
-  playerName: {
-    runs: number;
-    fours: number;
-    balls: number;
-    sixes: number;
-    status: string;
-    wicket: Wicket;
-  };
+export interface BattingStats {
+  runs: number;
+  balls: number;
+  fours: number;
+  sixes: number;
+  status: Status;
 }
 
-export interface Bowler {
-  playerName: {
-    overs: number;
-    runs: number;
-    wickets: number;
-  };
-}
-
-export interface FallOfWicket {
-  playerName: string;
-  score: string;
+export interface BowlingStats {
+  runs: number;
   overs: number;
+  wickets: number;
 }
 
-export interface Extras {
-  wide: number;
-  noBall: number;
-  legBy: number;
+export interface Player {
+  name: string;
+  batting: BattingStats;
+  bowling: BowlingStats;
 }
 
 export interface Team {
-  name:string;
-  batsman: Batsman[];
-  bowler: Bowler[];
-  fallOfWickets: FallOfWicket[];
-  extras: Extras;
+  name: string;
+  players: Player[];
   totalRuns: number;
   wickets: number;
-  overs:number;
+  overs: number;
 }
 
 export interface Match {
-  scoreCard: null;
   team1: Team;
   team2: Team;
   maxOvers: number;
