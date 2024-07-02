@@ -77,7 +77,7 @@ export default function Live() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-174px)]">
+    <div className="min-h-[calc(100vh-174px)] relative">
       {!checkUmpire() ? (
         <LiveMatch gameCode={matchData.gameCode} />
       ) : (

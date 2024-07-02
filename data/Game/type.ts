@@ -1,6 +1,7 @@
 export enum Status{
   NOT_OUT,
-  OUT
+  OUT,
+  YET_TO_BAT
 }
 
 export interface BattingStats {

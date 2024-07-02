@@ -1,4 +1,4 @@
-import { Match, Team } from "@/data/Game/type";
+import { Match, Status, Team } from "@/data/Game/type";
 import { FormEvent, useEffect, useState } from "react";
 import io from "socket.io-client";
 import sample from "@/data/Game/sample.json";
@@ -11,34 +11,15 @@ import Toss from "./Toss";
 import { gameData } from "@/store/atoms/gameData";
 import { useRecoilState } from "recoil";
 import ScoreBoard from "./ScoreBoard";
+import BattingModal from "./BattingModal";
 
 const Scorer = ({ gameCode }: { gameCode: string }) => {
   const message = JSON.stringify(sample);
   const [matchData, setMatchData] = useRecoilState(gameData);
   const session = useSession();
   const [loading, setLoading] = useState(false);
-  const [scoreJson, setScoreJson] = useState<Match>(
-    // JSON.parse(localStorage.getItem("scoreJson") as string)
-  );
-
-  const socket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL as any, {
-    transports: ["websocket"],
-  }) as any;
-
-  socket.on("connect", () => {
-    console.log("Connected to WebSocket server");
-  });
-
-  socket.emit("roomId", gameCode);
-
-  socket.on("message", (newMessage: Match) => {
-    console.log("Received message:", newMessage);
-    setScoreJson(newMessage);
-  });
-
-  socket.on("disconnect", () => {
-    console.log(socket.id);
-  });
+  const [scoreJson, setScoreJson] = useState<Match>();
+  // JSON.parse(localStorage.getItem("scoreJson") as string)
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -51,7 +32,10 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
         )) as any;
 
         setScoreJson(response.data.data.scoreCard);
-        localStorage.setItem("scoreJson", JSON.stringify(response.data.data.scoreCard));
+        localStorage.setItem(
+          "scoreJson",
+          JSON.stringify(response.data.data.scoreCard)
+        );
       } catch (error) {
         if (isAxiosError(error)) {
           toast.error(error.response?.data.message);
@@ -70,7 +54,6 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
     }
   }, [scoreJson, session]);
 
-  console.log(matchData);
   console.log(scoreJson);
 
   useEffect(() => {
@@ -102,17 +85,31 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
     return () => clearInterval(interval);
   }, [scoreJson, matchData.teams]);
 
+  const currentBattingPlayers = () => {
+    const count = scoreJson?.team1.players.filter(
+      (player) => player.batting.status === Status.NOT_OUT
+    ).length;
+    console.log(count);
+
+    return count;
+  };
+
   if (!scoreJson || scoreJson.team1 == null) {
-    return (
-      <Toss
-        scoreJson={scoreJson}
-        setScoreJson={setScoreJson}
-      />
-    );
+    return <Toss setScoreJson={setScoreJson} />;
   }
+
   return (
     <div>
-      <ScoreBoard batting={scoreJson.team1} bowling={scoreJson.team2} scoreJson={scoreJson}/>
+      {currentBattingPlayers() == 0 && (
+        <div className="absolute w-full h-full flex justify-center items-center backdrop-blur">
+          <BattingModal scoreJson={scoreJson} setScoreJson={setScoreJson} />
+        </div>
+      )}
+      <ScoreBoard
+        batting={scoreJson.team1}
+        bowling={scoreJson.team2}
+        scoreJson={scoreJson}
+      />
     </div>
   );
 };
