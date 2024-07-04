@@ -22,8 +22,6 @@ const Controller = () => {
   if(!striker || !nonStriker){
     return <LoadingComponent/>
   }
-
-  console.log(scoreJson);
   
 
   return (

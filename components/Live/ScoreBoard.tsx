@@ -24,11 +24,11 @@ const ScoreBoard = ({
           <div className="text-charcoal text-5xl">
             {batting.totalRuns}-{batting.wickets}
           </div>
-          <div className="mt-2 text-charcoal text-lg">({batting.overs} ov)</div>
+          <div className="mt-2 text-charcoal text-lg">({(batting.overs).toFixed(1)} ov)</div>
         </div>
         <div className="ml-10 text-xl text-charcoal">
           <span>Run Rate:</span>{" "}
-          <span>{batting.totalRuns / batting.wickets}</span>
+          <span>{(batting.totalRuns / batting.overs).toFixed(1)}</span>
         </div>
       </div>
     </div>
