@@ -57,6 +57,7 @@ export interface CricketMatch {
   started: boolean;
   teams: Team[];
   umpireId: number;
+  test?:number;
 }
 
 export const gameData = atom<CricketMatch>({

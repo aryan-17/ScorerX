@@ -4,26 +4,26 @@ import {Match} from "@/data/Game/type"
 
 const  LiveMatch = ({gameCode}:{gameCode:string}) => {
 
-  const [scoreJson, setScoreJson] = useState<Match>();
+  // const [scoreJson, setScoreJson] = useState<Match>();
 
-    const socket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL as any, {
-      transports: ["websocket"],
-    }) as any;
+    // const socket = io(process.env.NEXT_PUBLIC_SOCKET_SERVER_URL as any, {
+    //   transports: ["websocket"],
+    // }) as any;
 
-    socket.on("connect", () => {
-      console.log("Connected to WebSocket server");
-    });
+    // socket.on("connect", () => {
+    //   console.log("Connected to WebSocket server");
+    // });
 
-    socket.on("message", (newMessage:Match) => {
-      console.log("Received message:", newMessage);
-      setScoreJson(newMessage);
-    });
+    // socket.on("message", (newMessage:Match) => {
+    //   console.log("Received message:", newMessage);
+    //   setScoreJson(newMessage);
+    // });
 
-    socket.emit("roomId", gameCode);
+    // socket.emit("roomId", gameCode);
 
-    socket.on("disconnect", () => {
-        console.log(socket.id);
-    });
+    // socket.on("disconnect", () => {
+    //     console.log(socket.id);
+    // });
 
   return (
     <div>

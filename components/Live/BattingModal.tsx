@@ -5,47 +5,59 @@ import AuthButtons from "../auth/AuthButtons";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import toast from "react-hot-toast";
+import { useRecoilState } from "recoil";
+import { jsonData } from "@/store/atoms/scoreJson";
+import { cloneDeep } from 'lodash';
 
-const BattingModal = ({
-  scoreJson,
-  setScoreJson,
-}: {
-  scoreJson: Match;
-  setScoreJson: React.Dispatch<React.SetStateAction<Match | undefined>>;
-}) => {
+const BattingModal = () => {
+  const [scoreJson, setScoreJson] = useRecoilState(jsonData);
   const [batsman1, setBatsman1] = useState<string>("");
   const [batsman2, setBatsman2] = useState<string>("");
 
+  // Filter out the selected batsmen from the team's players list
   const players: Player[] =
     scoreJson?.team1.players.filter(
       (player) => player.name !== batsman1 && player.name !== batsman2
     ) || [];
 
-  const options: string[] = [];
-
-  for (let i = 0; i < players.length; i++) {
-    options.push(players[i].name);
-  }
+  // Generate options array for player names
+  const options: string[] = players.map((player) => player.name);
 
   const battingHandler = () => {
+    // Check if both batsmen are selected
     if (batsman1 && batsman2) {
-      const team = scoreJson?.team1;
+      // Create a deep copy of the team object to avoid mutating the state directly
+      const team = cloneDeep(scoreJson?.team1);
 
-      team?.players.map((player) => {
+      team?.players.forEach((player) => {
         if (player.name === batsman1 || player.name === batsman2) {
           player.batting.status = Status.NOT_OUT;
+          if (player.name === batsman1) {
+            player.batting.strike = true;
+          }
         }
       });
 
-      const newTeam = team;
-      scoreJson.team1 = newTeam;
-      setScoreJson(scoreJson);
+      // Update scoreJson with the new team information
+      setScoreJson({
+        ...scoreJson,
+        team1: team,
+      });
+
+      // Save updated scoreJson to localStorage
+      localStorage.setItem(
+        "scoreJson",
+        JSON.stringify({
+          ...scoreJson,
+          team1: team,
+        })
+      );
       return;
     }
-    toast.error("Select 2 Batsmen",{
-      id:"2"
+
+    toast.error("Select 2 Batsmen", {
+      id: "2",
     });
-    return;
   };
 
   return (

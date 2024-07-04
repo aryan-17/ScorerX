@@ -10,6 +10,7 @@ export interface BattingStats {
   fours: number;
   sixes: number;
   status: Status;
+  strike: boolean;
 }
 
 export interface BowlingStats {

@@ -5,13 +5,11 @@ import { gameData } from "@/store/atoms/gameData";
 import trophy from "@/assests/Live/trophy.png";
 import Image from "next/image";
 import "@/app/styles/neo.css";
+import { jsonData } from "@/store/atoms/scoreJson";
 
-const Toss = ({
-  setScoreJson,
-}: {
-  setScoreJson: React.Dispatch<React.SetStateAction<Match | undefined>>;
-}) => {
+const Toss = () => {
   const [matchData, setMatchData] = useRecoilState(gameData);
+  const [scoreJson, setScoreJson] = useRecoilState(jsonData);
 
   const setBatting = (battingTeam: string, bowlingTeam: string) => {
     const teamBatting = matchData.teams.filter(
@@ -31,6 +29,7 @@ const Toss = ({
             fours: 0,
             sixes: 0,
             status: Status.YET_TO_BAT,
+            strike:false
           },
           bowling: {
             runs: 0,
@@ -52,6 +51,7 @@ const Toss = ({
             fours: 0,
             sixes: 0,
             status: Status.NOT_OUT,
+            strike:false
           },
           bowling: {
             runs: 0,

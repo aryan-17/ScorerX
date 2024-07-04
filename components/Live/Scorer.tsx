@@ -1,6 +1,5 @@
-import { Match, Status, Team } from "@/data/Game/type";
-import { FormEvent, useEffect, useState } from "react";
-import io from "socket.io-client";
+import { Match, Status } from "@/data/Game/type";
+import {  useEffect, useState } from "react";
 import sample from "@/data/Game/sample.json";
 import { useSession } from "next-auth/react";
 import { apiConnector } from "@/services/apiConnector";
@@ -12,16 +11,19 @@ import { gameData } from "@/store/atoms/gameData";
 import { useRecoilState } from "recoil";
 import ScoreBoard from "./ScoreBoard";
 import BattingModal from "./BattingModal";
+import Controller from "./Controller";
+import { jsonData } from "@/store/atoms/scoreJson";
 
 const Scorer = ({ gameCode }: { gameCode: string }) => {
   const message = JSON.stringify(sample);
   const [matchData, setMatchData] = useRecoilState(gameData);
   const session = useSession();
   const [loading, setLoading] = useState(false);
-  const [scoreJson, setScoreJson] = useState<Match>();
-  // JSON.parse(localStorage.getItem("scoreJson") as string)
+  const [scoreJson, setScoreJson] = useRecoilState(jsonData);
 
   useEffect(() => {
+    console.log("Get Data");
+    
     const getUserDetails = async () => {
       if (!session) return;
       try {
@@ -52,11 +54,13 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
     if (!scoreJson) {
       getUserDetails();
     }
-  }, [scoreJson, session]);
+  }, [scoreJson]);
 
   console.log(scoreJson);
 
   useEffect(() => {
+    console.log("Send Data");
+    
     const sendDataToDatabase = async () => {
       try {
         setLoading(true);
@@ -80,10 +84,10 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
     };
     const interval = setInterval(() => {
       sendDataToDatabase();
-    }, 30000);
+    }, 10000);
 
     return () => clearInterval(interval);
-  }, [scoreJson, matchData.teams]);
+  }, [scoreJson]);
 
   const currentBattingPlayers = () => {
     const count = scoreJson?.team1.players.filter(
@@ -95,14 +99,14 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
   };
 
   if (!scoreJson || scoreJson.team1 == null) {
-    return <Toss setScoreJson={setScoreJson} />;
+    return <Toss/>;
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-20">
       {currentBattingPlayers() == 0 && (
         <div className="absolute w-full h-full flex justify-center items-center backdrop-blur">
-          <BattingModal scoreJson={scoreJson} setScoreJson={setScoreJson} />
+          <BattingModal />
         </div>
       )}
       <ScoreBoard
@@ -110,6 +114,7 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
         bowling={scoreJson.team2}
         scoreJson={scoreJson}
       />
+      <Controller/>
     </div>
   );
 };
