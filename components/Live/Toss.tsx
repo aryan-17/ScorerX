@@ -35,6 +35,7 @@ const Toss = () => {
             runs: 0,
             wickets: 0,
             overs: 0,
+            status:false
           },
         })),
         totalRuns: 0,
@@ -43,8 +44,8 @@ const Toss = () => {
       },
       team2: {
         name: bowlingTeam,
-        players: teamBowling.map((player) => ({
-          name: player.name,
+        players: teamBowling[0].players.map((player) => ({
+          name: player.user.FirstName + " " + player.user.LastName,
           batting: {
             runs: 0,
             balls: 0,
@@ -57,6 +58,7 @@ const Toss = () => {
             runs: 0,
             wickets: 0,
             overs: 0,
+            status:false
           },
         })),
         totalRuns: 0,

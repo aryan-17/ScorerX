@@ -19,6 +19,8 @@ const Controller = () => {
       player.batting.strike === false
   )[0];
 
+  const bowler = scoreJson.team2.players.filter((player)=>player.bowling.status === true)[0];
+
   if(!striker || !nonStriker){
     return <LoadingComponent/>
   }
@@ -29,11 +31,11 @@ const Controller = () => {
       <div className="flex w-full justify-evenly h-full">
         <div className="grid grid-rows-3 grid-cols-2 gap-x-10">
           <div></div>
-          <div className="flex items-center text-pure-greys-400 text-xl">
+          <div className="flex items-center text-pure-greys-400 text-xl gap-x-5">
             <div className="w-full text-center">R</div>
             <div className="w-full text-center">B</div>
-            <div className="w-full text-center">4&apos;s</div>
-            <div className="w-full text-center">6&apos;s</div>
+            <div className="w-full text-center">4<span className="text-sm">s</span></div>
+            <div className="w-full text-center">6<span className="text-sm">s</span></div>
           </div>
           <div>
             <div className="flex">
@@ -63,7 +65,7 @@ const Controller = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center text-charcoal text-xl">
+          <div className="flex items-center text-charcoal text-xl gap-x-5">
             <div className="w-full text-center">{striker.batting.runs}</div>
             <div className="w-full text-center">{striker.batting.balls}</div>
             <div className="w-full text-center">{striker.batting.fours}</div>
@@ -95,7 +97,7 @@ const Controller = () => {
               )}
             </div>
           </div>
-          <div className="flex items-center text-charcoal text-xl">
+          <div className="flex items-center text-charcoal text-xl gap-x-5">
             <div className="w-full text-center">{nonStriker.batting.runs}</div>
             <div className="w-full text-center">{nonStriker.batting.balls}</div>
             <div className="w-full text-center">{nonStriker.batting.fours}</div>
@@ -103,7 +105,24 @@ const Controller = () => {
           </div>
         </div>
         <div className="border-l-2 border-pure-greys-50"></div>
-        <div>Bowling</div>
+        <div className="grid grid-rows-2 grid-cols-2 gap-x-10">
+        <div></div>
+          <div className="flex items-center text-pure-greys-400 text-xl">
+            <div className="w-full text-center">O</div>
+            <div className="w-full text-center">R</div>
+            <div className="w-full text-center">W</div>
+            <div className="w-full text-center">EC</div>
+          </div>
+          <div className="flex text-charcoal font-semibold text-xl items-center">
+            {bowler.name}
+          </div>
+          <div className="flex items-center text-charcoal text-xl gap-x-5">
+            <div className="w-full text-center">{bowler.bowling.overs.toFixed(1)}</div>
+            <div className="w-full text-center">{bowler.bowling.runs}</div>
+            <div className="w-full text-center">{bowler.bowling.wickets}</div>
+            <div className="w-full text-center">{(bowler.bowling.runs/bowler.bowling.overs).toFixed(1)}</div>
+          </div>
+        </div>
       </div>
       <div>
         <Controls />

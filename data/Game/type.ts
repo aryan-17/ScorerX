@@ -17,6 +17,7 @@ export interface BowlingStats {
   runs: number;
   overs: number;
   wickets: number;
+  status:boolean;
 }
 
 export interface Player {

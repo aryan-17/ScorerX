@@ -84,7 +84,7 @@ const Scorer = ({ gameCode }: { gameCode: string }) => {
     };
     const interval = setInterval(() => {
       sendDataToDatabase();
-    }, 10000);
+    }, 100000);
 
     return () => clearInterval(interval);
   }, [scoreJson]);
